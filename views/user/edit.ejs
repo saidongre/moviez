@@ -1,0 +1,50 @@
+
+<%layout("./layouts/boilerplate")%>
+<h1>edit credential</h1>
+    <form action="/account?_method=PUT"method="POST">
+     <div>
+        <div>
+            <label for="username"class="form-label">name:</label>
+            <input type="text"class="form-control" name="username"id="username"required value="<%=user.username%>">
+         </div>
+         <div>
+            <label for="preflang"class="form-label">preflang:</label>
+            <select name="preflang" id="preflang">
+                <%for(let language of languages){%>
+                    <option value="<%=language%>"<%=user.preflang===language?"selected":""%>><%=language%></option>
+                <%}%>
+            </select>
+         </div>
+         <div>
+            <label for="favgenre"class="form-label">favgenre:</label>
+            <select name="favgenre" id="favgenre">
+                <%for(let genre of genres){%>
+                    <option value="<%=genre%>"<%=user.favgenre===genre?"selected":""%>><%=genre%></option>
+                <%}%>
+            </select>
+         </div>
+         
+         <div>
+            <label for="password"class="form-label">password:</label>
+            <input type="text"class="form-control" name="password"id="password"value="<%=user.password%>">
+         </div>
+         <div>
+            <label for="email"class="form-label">email:</label>
+            <input type="text"class="form-control" name="email"id="email"value="<%=user.email%>">
+         </div>
+        
+         
+        
+         
+         <div>
+            <label for="image"class="form-label">image:</label>
+            <input type="text"class="form-control" name="image"id="image" value="<%=user.image%>">
+         </div>
+        
+            <button>submit</button>
+         </div>
+     </div>
+    </form>
+    <br>
+    <a class="btn btn-primary"href="/account">back</a>
+    

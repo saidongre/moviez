@@ -1,0 +1,120 @@
+
+<%layout("./layouts/boilerplate")%>
+<link rel="stylesheet" href="/stylesheets/movieshow.css">
+
+
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Moviez</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/movies">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/movies/new">add</a>
+        </li>
+        <%if(currentuser){%>  
+        <li class="nav-item">
+          <a class="nav-link" href="/account">Account</a>
+        </li>
+        <%}%>
+        
+        
+      </ul>
+         <div class="navbar-nav ml-auto">
+          <%if(!currentuser){%>
+            <li class="nav-item">
+              <a class="nav-link " href="/login">login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/signup">signup</a>
+            </li>
+          <%}else{%>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">logout</a>
+            </li>
+            <%}%>
+         </div>
+
+    </div>
+  </div>
+ </nav>   <br>
+ <%-include("../styles/flash.ejs")%>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-7">
+              
+                <form name="sort">
+                    <select name="genre" id="genre">
+                      <%for(let genre of genres){%>
+                        <option value="<%=genre%>"><%=genre%></option>
+                         
+                      <%}%>
+                    </select>
+                    
+                    <select name="language"  id="language">
+                        <%for(let language of languages){%>
+                            <option value="<%=language%>"><%=language%></option>
+                        <%}%>
+                    </select>
+                    <div>
+                        <button>submit</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+   
+    <div class="container">
+        <% for(let movie of movies){%>
+        <div class="card">
+          <div class="row">
+            <div class="col">
+              <%movie.images.forEach((image,i)=>{%>
+                <div class="col <%=i===0?"active":""%>">
+                  <%if(i==0){%>
+                   <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="width:10em;height:10em" >
+                 <%}%>
+                 </div>
+               <%})%>
+            </div>
+            <div class="col">
+              <div>
+                <h5 class="card-title"><%=movie.name%></h5>
+                <p ><b class="card-text">rating:</b><%=movie.rating%></p> 
+            </div>
+            </div>
+            <div class="col">
+              <div >
+                <a class="btn btn-info"href="/movies/<%=movie._id%>">INFO </a>
+              <form action="/movies/<%=movie._id%>/watchlist" method="POST">
+                <button class="btn btn-warning mb-3">watchlist</button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%}%> 
+      </div>
+      
+      <script>
+        const form=document.forms.sort;
+        function handleSubmit(event){
+           event.preventDefault();
+            const formData=new FormData(event.target);
+            const asString=new URLSearchParams(formData).toString();
+            console.log(asString);
+          }
+          FormDataEvent.addEventListener("submit",handleSubmit)
+      </script>
+      
+      
+  
+
+ 

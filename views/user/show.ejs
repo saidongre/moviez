@@ -1,0 +1,89 @@
+
+<%layout("./layouts/boilerplate")%>
+<link rel="stylesheet" href="/stylesheets/usershow.css">
+<link rel="stylesheet" href="/stylesheets/movieshow.css">
+
+
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Moviez</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/movies">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/account">Account</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/account/watchlist" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            DETAILS
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/account/comments">comments</a></li>
+            <li><a class="dropdown-item" href="/account/watchlist">watchlist</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/logout">logout</a></li>
+          </ul>
+        </li>
+       
+      </ul>
+      <li class="nav-item">
+        <a class="nav-link" class="btn btn-success"href="/logout">logout</a>
+      </li>
+      
+    </div>
+  </div>
+</nav>
+<div class="continer-mb-30">
+   <h1>PROFILE:</h1>
+<div class="container"style="width:40em;">
+  <div class="row">
+    <div class="col">
+      <img src="<%=user.image%>" alt="add profile" style="width: 18rem;"><br>
+    </div>
+    <div class="col">
+      <p><b>username:</b><%=user.username%></p>
+    <p><b>favourite genre:</b><%=user.favgenre%></p>
+    <p><b>preferable language:</b><%=user.preflang%></p>
+    <p><b>email:</b><%=user.email%></p>
+    <div class="btn_wrap">
+      <span class="helpers">options</span>
+      <div class="options">
+        <a class="btn btn-primary btn-sm"href="/account/edit">edit</a>
+        <a class="btn btn-secondary btn-sm"href="/movies">back</a>
+      </div>
+    </div>
+    </div>
+    
+  </div>
+ 
+
+</div>
+</div><br>
+
+<h2>movies of your favourite genre:</h2>
+  <section class="scrollport">
+    <%for(let movie of movies){%>
+      <div class="card"style="width:10em;height:10em">
+        <%movie.images.forEach((image,i)=>{%>
+          <div class="col <%=i===0?"active":""%>">
+            <%if(i==0){%>
+             <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="height:10em;width:10em" >
+           <%}%>
+           </div>
+          <%})%>
+          <div class="card">
+            <div class="card-body">
+              <p><%=movie.name%></p>
+              <p><%=movie.rating%></p>
+            </div>
+     
+          </div>
+      </div>
+    <%}%>
+
+  </section>

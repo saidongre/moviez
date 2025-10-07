@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300');
+
+body {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  margin: 0;
+  background: linear-gradient(to right, #114357, #F29492, #f64f59);
+}
+
+.login-form {
+  width: 300px;
+  padding: 50px;
+  border-radius: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  display: grid;
+  backdrop-filter: blur(12px);
+  font-family: 'Montserrat', sans-serif;
+  
+  position: relative;
+}
+
+h1 {
+  color: white;
+  letter-spacing: 2px;
+  margin-top: 0;
+  text-align: center
+}
+
+input, button {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 20px auto;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 13px 21px rgba(0, 0, 0, 0.05);
+  color: white
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+input:focus {
+  outline: none;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.signup:hover {
+  color: #F29492
+}
+
+.forgot-signup {
+  display: flex;
+  justify-content: space-between;;
+}
+
+button {
+  cursor: pointer;
+  background: #F29492;
+  color: white;
+  transition: 0.5s;
+}
+
+button:hover {
+  background: #114357;
+}
+
+.blob {
+  position: absolute;
+  top: 30vh;
+  left: calc(50% - 300px);
+}

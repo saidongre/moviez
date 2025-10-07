@@ -1,0 +1,49 @@
+/* One day we may be able to use CSS variables for the animation's % calculations
+   For now we calculate them in advance from:
+    numquotes = 12
+    fadingin = 2s;
+    showing = 5s;
+    fadingout = 2s;
+    duration = (fadingin + showing + fadingout) * numquotes
+*/
+.quoteswrapper {
+    position: relative;
+  }
+  .quotes {
+    position: absolute;
+    opacity: 0;
+    animation-name: fadeinout;
+    animation-duration: 108s;     /* = (fadingin + showing + fadingout) * numquotes */
+    animation-iteration-count: infinite;
+  }
+  
+  @keyframes fadeinout {
+    0% {
+      opacity: 0;
+    }
+   1.85% {                      /* = fadingin / duration * 100% */
+      opacity: 1;
+    }
+    4.63% {                     /* = (fadingin + showing) / duration * 100% */
+      opacity: 1;
+    }
+    6.48% {                     /* = (fadingin + showing + fadingout) / duration * 100% */
+      opacity: 0;
+    }
+   100% {
+      opacity: 0;
+    }
+  }
+  
+  .quotes:nth-child(1) { animation-delay: 0s; }  /* delay = (n-1) / numquotes * duration */
+  .quotes:nth-child(2) { animation-delay: 9s; }
+  .quotes:nth-child(3) { animation-delay: 18s; }
+  .quotes:nth-child(4) { animation-delay: 27s; }
+  .quotes:nth-child(5) { animation-delay: 36s }
+  .quotes:nth-child(6) { animation-delay: 45s; }
+  .quotes:nth-child(7) { animation-delay: 54s; }
+  .quotes:nth-child(8) { animation-delay: 63s; }
+  .quotes:nth-child(9) { animation-delay: 72s; }
+  .quotes:nth-child(10) { animation-delay: 81s; }
+  .quotes:nth-child(11) { animation-delay: 90s; }
+  .quotes:nth-child(12) { animation-delay: 99s; }

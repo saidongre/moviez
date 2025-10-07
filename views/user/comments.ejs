@@ -1,0 +1,23 @@
+
+
+
+<%layout("./layouts/boilerplate")%>
+<%-include("../styles/flash.ejs")%>
+<link rel="stylesheet" href="/stylesheets/movieshow.css">
+<h1>comments</h1>
+
+
+
+<% for(let comment of user.comments){%>
+    <div class="card" style="width: 18rem;">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+          <h5 class="card-title"><%=comment.moviename%></h5>
+          <p class="card-text"><%=comment.comment%></p>
+          <form action="/account/comments/<%=comment._id%>?_method=DELETE" method="POST">
+            <button class="btn btn-danger">delete</button>
+        </form>
+        </div>
+      </div>
+<%}%>
+<a href="/account" class="btn btn-secondary">back</a>

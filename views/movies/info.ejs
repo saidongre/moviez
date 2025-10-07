@@ -1,0 +1,367 @@
+
+<%layout("./layouts/boilerplate")%>
+<link rel="stylesheet" href="/stylesheets/info.css">
+<link rel="stylesheet" href="/stylesheets/usershow.css">
+<link rel="stylesheet" href="/stylesheets/moviecard.css">
+<link rel="stylesheet" href="/stylesheets/scrollarea.css">
+<link rel="stylesheet" href="/stylesheets/revealingeffect.css">
+<link rel="stylesheet" href="/stylesheets/check.css">
+<!-- <link rel="stylesheet" href="/stylesheets/movieshow.css"> -->
+<!-- <link rel="stylesheet" href="/stylesheets/avengerscard.css"> -->
+<!-- <link rel="stylesheet" href="/stylesheets/avengerscard.scss"> -->
+
+
+
+<nav class="navbar  sticky-top navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Moviez</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/movies">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/movies/new">add</a>
+        </li>
+        <%if(currentuser){%>  
+        <li class="nav-item">
+          <a class="nav-link" href="/account">Account</a>
+        </li>
+        <%}%>
+        
+        
+      </ul>
+         <div class="navbar-nav ml-auto">
+          <%if(!currentuser){%>
+            <li class="nav-item">
+              <a class="nav-link " href="/login">login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/signup">signup</a>
+            </li>
+          <%}else{%>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">logout</a>
+            </li>
+            <%}%>
+         </div>
+
+    </div>
+  </div>
+</nav>
+
+
+
+<%-include("../styles/flash.ejs")%>
+
+<h1 class="block-effect" style="--td: 1.2s">
+  <div class="block-reveal" style="--bc: #f10c0c; --d: .1s" ><%=movie.name%></div>
+  <div class="block-reveal" style="--bc: #c5ed14; --d: .5s"><%=movie.year%></div>
+</h1>
+<a class="btn btn-outline-secondary btn-sm "href="/movies">back</a>
+<form action="/movies/<%=movie._id%>/watchlist" method="POST">
+  <button class="btn btn-outline-warning" type="button">watchlist</button>
+</form>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card"style="width:30em;">
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <%movie.images.forEach((image,i)=>{%>
+              <div class="carousel-item <%=i===0?"active":""%>">
+                <img src="<%=image.url%>" class="d-block w-100" alt="..."style="height:20em">
+              </div>
+            <%})%>
+            
+          </div>
+          <%if(movie.images.length>1){%>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          <%}%>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <p><b>hero:</b><%=movie.hero%></p>
+              <p><b>heroine:</b><%=movie.heroine%></p>
+              <p><b>ott platform:</b><%=movie.ott%></p>
+            </div>
+            <div class="col">
+              <h5 class="card-text">rating:<%=movie.rating%></h5>
+              <h5>language:<%=movie.language%></h5>
+              <h5>genre:<%=movie.genre%></h5>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+    
+    <div class="col-md-6">
+      <div class="comments">
+        <h3 class="commentheading">comments:</h3>
+      <div class="ymacha overflow-scroll-y">
+        <% for(let comment of movie.comments){%>
+          <div class="card" style="width: 18rem;height:10em">
+              <!-- <img src="..." class="card-img-top" alt="..."> -->
+              <div class="card-body">
+                <h5 class="card-title"><%=comment.name%></h5>
+                <p class="card-text"><%=comment.comment%></p>
+                <%if(currentuser){%>
+                  <%if(currentuser.username==comment.name){%>
+                    <form action="/movies/<%=movie._id%>/comments/<%=comment.id%>?_method=DELETE" method="POST">
+                      <button class="btn btn-sm btn-danger">delete</button>
+                  </form>
+                  <%}%>
+                <%}%>
+                
+              </div>
+            </div>
+      <%}%>
+      </div>
+    </div>
+      
+  </div>
+    </div>
+  </div>
+</div><br><br>
+<div class="examples">
+  <div class="btn_wrap">
+    <span class="helpers">options</span>
+    <div class="options">
+      <a href="/movies/<%=movie._id%>/edit" class="btn btn-primary btn-sm">edit</a>
+      <form action="/movies/<%=movie._id%>?_method=DELETE" method="POST">
+        <button class="btn btn-danger btn-sm">delete</button>
+      </form>
+      
+      
+    </div>
+  </div>
+  </div>
+</div>
+
+
+<div class="circle-wrap">
+  <div class="circle">
+    
+    <div class="mask full">
+      <div class="fill"></div>
+    </div>
+   
+    <div class="mask half">
+      <div class="fill"></div>
+    </div>
+    
+    <div class="inside-circle">
+      <%=movie.rating*10%>
+    </div>
+    
+  </div>
+</div>
+
+<div class="circlePercent">
+  <div class="counter" data-percent="<%=movie.rating*10%>"></div>
+  <div class="progress"></div>
+  <div class="progressEnd"></div>
+</div>
+
+
+<br><br><br><br>
+
+<div class="card">
+  <div class="container">
+    <div class="row">
+      <h2>recommended movies</h2>
+     <div class="col">
+      <div class="yrecommendedmovies" >
+        <div class="container">
+          
+          <%if(results){%>
+            <% for(let result of results){%>
+              <%if(movie.rating<=result.rating){%>
+         <div class="card" style="height:10em">
+          <div class="row">
+            <div class="col">
+              
+                    <%result.images.forEach((image,i)=>{%>
+                      <div class="col <%=i===0?"active":""%>">
+                        <%if(i==0){%>
+                         <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="height:10em;width:10em" >
+                       <%}%>
+                       </div>
+                     <%})%>
+            </div>
+            <div class="col">
+              <div class="card-body">
+                <p><b></b><%=result.name%></p>
+                <p><b>rating:</b><%=result.rating%></p>
+              </div>
+              
+            </div>
+            <div class="infowatchlist col">
+              <div >
+                <a class="btn btn-outline-info"href="/movies/<%=result._id%>">INFO </a>
+              <form action="/movies/<%=result._id%>/watchlist" method="POST">
+                <button class="btn btn-outline-warning mb-3">watchlist</button>
+              </form>
+              </div>
+            </div>
+         </div>
+          </div>
+          <%}%>
+           
+          <%}%>
+        <%}%>
+                 
+        </div>
+       
+        
+      </div>
+      </div>
+      <div class="col">
+        <h2>comment</h2>
+        <div class="col-md-12">
+          <%if(currentuser){%>
+            <form action="/movies/<%=movie.id%>/comments" method="POST">
+              <label class="form-label"for="name">name:</label>
+              <input class="form-control"name="comment[name]"  id="name"value="<%=currentuser.username%>">
+              <label class="form-label"for="moviename">moviename:</label>
+              <input class="form-control"name="comment[moviename]"  id="moviename"value="<%=movie.name%>">
+              <label class="form-label"for="comment">add comment:</label>
+              <textarea class="form-control"name="comment[comment]" rows="5" cols="60" id="comment"></textarea>
+              <button class="btn btn-outline-primary">submit</button>
+          </form>
+          <%}%>
+  
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<br><br>
+<div class="d-grid gap-2">
+  
+  <a class="btn btn-outline-primary" href="/account/watchlist"type="button">my watchlist</a>
+</div>
+
+
+<%if(currentuser){%>
+  <%-include("../styles/footer.ejs")%>
+<%}%>
+
+
+
+
+
+
+<a href="https://abubakersaeed.netlify.app/designs/d12-block-revealing-effect" class="abs-site-link" rel="nofollow noreferrer" target="_blank">abs/designs/d12-block-revealing-effect</a>
+
+
+<!-- delete -->
+
+<div id="ContainerHL">  
+  <div id="MainPoster">   
+    <%movie.images.forEach((image,i)=>{%>
+      <div  <%=i===0?"active":""%>>
+        <%if(i==0){%>
+         <img src="<%=image.url%>"  alt="..." height=280 >
+       <%}%>
+       </div>
+     <%})%>
+      <div id="Ratings">
+        <table>
+          <tr>
+            <td><b><span style="color:rgb(200,170,30);">IMDb:</span></b></td>
+            <td><b><%=movie.rating%></b><span style="color:rgb(70,70,70);"> / 10</span></td>
+          </tr>
+         
+        </table>
+
+ </div>
+ </div>
+
+ <div id="TitleHL"><b><%=movie.name%></b></div> 
+ <div id="UserRatingHL">
+   <div class="stars" id="s1">&#9733</div>
+   <div class="stars" id="s2">&#9733</div>
+   <div class="stars" id="s3">&#9733</div>
+   <div class="stars" id="s4">&#9733</div>
+   <div class="stars" id="s5">&#9733</div>
+ </div>  
+</div>
+<div id="SelMovie">
+ <div id="MovieInfoMain">
+   <div id="Title"><b> </b></div>    
+   <div id="UserRating"></div>   
+   <div id="DetailsTop"></div>
+   <div id="DetailsTopCover"></div>
+   <div id="DetailsBottom"></div>
+   <div id="DetailsBottomCover"></div>
+   <div id="Details">
+    <table>
+      <tr><td class="Key">Genre</td><td class="Value"><%=movie.genre%></td></tr>       
+      <tr><td class="Key">Released</td><td class="Value"><%=movie.year%></td></tr>
+      <tr><td class="Key">story</td><td class="Value"><%=movie.storyline%></td></tr>
+      <tr><td class="Key">hero</td><td class="Value"><%=movie.hero%></td></tr>
+      <tr><td class="Key">heroine</td><td class="Value"><%=movie.heroine%></td></tr>
+      <tr><td class="Key">ott</td><td class="Value"><%=movie.ott%></td></tr>
+      <tr><td class="Key">rating</td><td class="Value"><%=movie.rating%></td></tr>
+      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
+      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
+      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
+      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
+      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
+        <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
+      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
+      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
+      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
+      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
+     </table>
+   </div> 
+ 
+ </div>
+</div>  
+
+    <!-- card -->
+   
+
+<script>
+  function setProgress(elem, percent) {
+   
+  var
+    degrees = percent,
+    transform = /MSIE 9/.test(navigator.userAgent) ? 'msTransform' : 'transform';
+  elem.querySelector('.counter').setAttribute('data-percent', Math.round(percent));
+  elem.querySelector('.progressEnd').style[transform] = 'rotate(' + degrees + 'deg)';
+  elem.querySelector('.progress').style[transform] = 'rotate(' + degrees + 'deg)';
+  if(percent >= 50 && !/(^|\s)fiftyPlus(\s|$)/.test(elem.className))
+    elem.className += ' fiftyPlus';
+}
+
+(function() {
+  var
+    elem = document.querySelector('.circlePercent'),
+    percent = movie.rating*10;
+  (function animate() {
+    setProgress(elem, percent );
+    if(percent < 100)
+      setTimeout(animate, 15);
+  })();
+})();
+</script>
+
+   
+    

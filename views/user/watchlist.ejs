@@ -1,0 +1,41 @@
+
+
+<%layout("./layouts/boilerplate")%>
+<%-include("../styles/flash.ejs")%>
+<link rel="stylesheet" href="/stylesheets/movieshow.css">
+<!-- <link rel="stylesheet" href="/stylesheets/info.css"> -->
+<h1>watchlist</h1>
+
+
+<div class="container">
+    <% for(let watchlist of user.watchlists){%>
+    <div class="card">
+      <div class="row">
+        <div class="col">
+          <%watchlist.images.forEach((image,i)=>{%>
+            <div class="col <%=i===0?"active":""%>">
+              <%if(i==0){%>
+               <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="width:8em;height:8em">
+             <%}%>
+             </div>
+           <%})%>
+        </div>
+        <div class="col">
+          <div>
+            <h5 class="namerating card-text"><%=watchlist.name%></h5>
+            <p ><b class="card-text">rating:</b><%=watchlist.rating%></p> 
+        </div>
+        </div>
+        <div class="delete col">
+            <form action="/account/watchlist/<%=watchlist._id%>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">delete</button>
+            </form>
+        </div>
+      </div>
+    </div>
+    <%}%> 
+    <a href="/account" class="btn btn-secondary">back</a>
+
+  </div>
+  
+

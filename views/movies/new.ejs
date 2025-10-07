@@ -1,0 +1,114 @@
+
+
+<%layout("./layouts/boilerplate")%>
+
+  <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Moviez</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/movies">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/account">Account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"type="button" class="btn btn-outline-success" href="/logout">logout</a>
+          </li>
+         
+        </ul>
+       
+      </div>
+    </div>
+  </nav><br>
+
+
+  
+
+
+    <h1>add new movie</h1>
+    <form action="/movies"method="POST"novalidate class="validated-form" enctype="multipart/form-data">
+     <div>
+        <div>
+            <label for="name"class="form-label">name:</label>
+            <input type="text"class="form-control" name="movie[name]"placeholder="name"id="name"required>
+            <div class="valid-feedback">proceed</div>
+         </div>
+         <div>
+            <label for="language"class="form-label">language:</label>
+            <select name="movie[language]" id="language">
+                <%for(let language of languages){%>
+                    <option value="<%=language%>"><%=language%></option>
+                <%}%>
+            </select>
+         </div>
+         <div>
+            <label for="genre"class="form-label">genre:</label>
+            <select name="movie[genre]" id="genre">
+                <%for(let genre of genres){%>
+                    <option value="<%=genre%>"><%=genre%></option>
+                <%}%>
+            </select>
+         </div>
+         <div>
+            <label for="rating"class="form-label">rating:</label>
+            <input type="text"class="form-control" name="movie[rating]"placeholder="rating"id="rating">
+         </div>
+         <div>
+            <label for="hero"class="form-label">hero:</label>
+            <input type="text"class="form-control" name="movie[hero]"placeholder="hero"id="hero">
+         </div>
+         <div>
+            <label for="heroine"class="form-label">heroine:</label>
+            <input type="text" class="form-control"name="movie[heroine]"placeholder="heroine"id="heroine">
+         </div>
+         <div>
+            <label for="storyline"class="form-label">story line:</label>
+            <textarea name="movie[storyline]" class="form-control"cols="30"rows="10"></textarea>
+         </div>
+         <div>
+            <label for="year"class="form-label">year:</label>
+            <input type="text"class="form-control" name="movie[year]"placeholder="year"id="year">
+         </div>
+         <div>
+            <label for="ott"class="form-label">ott:</label>
+            <input type="text"class="form-control" name="movie[ott]"placeholder="ott"id="ott">
+         </div>
+         <input type="file" name="images" id=""multiple>
+         <!-- <div>
+            <label for="image"class="form-label">image:</label>
+            <input type="text"class="form-control" name="movie[image]"id="image"placeholder="image url">
+         </div> -->
+         <div>
+            <button class="btn btn-success">ADD</button>
+         </div>
+     </div>
+    </form>
+    <!-- <script src="/validateforms.js"> </script> -->
+    
+    <script>
+ // Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.validated-form')
+
+  // Loop over them and prevent submission
+  Array.from(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+    </script>

@@ -1,0 +1,824 @@
+<form action="/login"method="POST">
+    <div class="mt-5">
+        <div class="mb-3 row">
+            <label for="username" class="col-sm-2 col-form-label">username</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control-plaintext" id="username" placeholder="unique"name="username">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control" id="inputPassword"name="password">
+            </div>
+          </div>
+          <div>
+    </div>
+    <div>
+        <button>login</button>
+    </div>
+    <a href="/movies/<%=movie._id>%>">back</a> 
+    <%-include("../styles/footer")%>
+
+
+    <div class="card" style="width: 18rem;">
+      <img src="..." class="card-img-top" alt="...">
+      <div class="card-body">
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </div>
+    </div>
+    <a href="/movies/<%=movie._id%>" > 
+      <ul>
+          <div class="row-3">
+              <div class="col-2 row-3 offset-3">
+                 <img src="<%=movie.image%>">
+              </div>
+              <div class="col-3">
+                  <li><%=movie.name%></li>
+                  <li><b>rating:</b><%=movie.rating%></li> 
+              </div> 
+          </div>
+            
+      </ul>
+  <%}%></a>
+<a href="/new">add movie</a>
+<form action="/logout"method="POST">
+  <button>log out</button>
+</form>
+<% for(let movie of movies){%>
+  <div class="card" style="width: 18rem;">
+      <img src="<%=movie.image%>" class="card-img-top" alt="didnt load"style="height=10em">
+      <a href="/movies/<%=movie._id%>" > 
+      <div class="card-body">
+        <div class="card-text">
+          <div>
+              <li><%=movie.name%></li>
+              <li><b>rating:</b><%=movie.rating%></li> 
+          </div>
+      </div>
+      </div>
+      </a>
+  </div>
+  <%}%>
+
+
+
+
+
+
+
+
+  <% for(let movie of movies){%>
+    <div class="card" mb-3 style="width:20em">
+        <div class="row">
+            <div class="col-md-4">
+                <img class="image-fluid" src="<%=movie.image%>" class="card-img-top" alt="no image" width="10em">
+            </div>
+          
+            <div class="col-md-8">
+               
+                <div>
+                    <p class="card-title"><%=movie.name%></p>
+                    <p ><b class="card-text">rating:</b><%=movie.rating%></p> 
+                </div>
+                <a href="/movies/<%=movie._id%>">info </a>
+            </div>
+        </div>
+    </div>
+    <%}%>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-reels" viewBox="0 0 16 16">
+      <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM1 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0z"/>
+      <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z"/>
+      <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+    </svg>
+  <div>
+      <i class="bi bi-camera-reels" width="200em"></i>
+
+
+
+
+      app.post("/movies/:id",async(req,res)=>{
+        const {id}=req.params;
+        const movie=await Movie.findById(id);
+        const data=req.body
+        const review=new Review(req.body);
+        
+        review.movies=movie;
+        
+      //const result=await review.save();
+      //console.log(data.review)
+       movie.reviews.push(data.review);
+        console.log(review)
+    
+       // console.log(movie)
+    
+    })
+
+
+
+
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/movies">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/new">Add</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
+          </ul>
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    app.post("/movies/:id/reviews",async(req,res)=>{
+      const movie=await Movie.findById(req.params.id)
+      const data=req.body
+      console.log(data)
+      const review=new Review(data)
+      // const review=new Review(req.body.review);
+      // console.log(review)
+      
+      movie.reviews.push(data.review);
+       await review.save();
+      await movie.save();
+      res.redirect(`/movies/${movie._id}`)
+  })
+
+
+
+
+  app.post("/movies/:id/reviews",async(req,res)=>{
+    const movie=await Movie.findById(req.params.id);
+    console.log(req.body)
+    const review=new Review(req.body.review);
+   movie.reviews.push(review);
+    await review.save();
+   // await movie.save();
+    res.redirect(`/movies/${movie._id}`)
+})
+
+
+
+
+<div class="card" mb-3 >
+  <div class="row">
+      <div class="col-md-3">
+          <img class="image-fluid" src="<%=movie.image%>" class="card-img-top" alt="no image" width="200em">
+      </div>
+      <div class="col-md-5">
+          <div>
+              <h2 class="card-text">rating:<%=movie.rating%></h2> <br>
+              <h2>language:<%=movie.language%></h2>
+              <h2>genre:<%=movie.genre%></h2>
+          </div>
+      </div>
+      <div class="col">
+          <h1>comments:</h1>
+          <% for(let comment of movie.comments){%>
+          <div class="card"> 
+              <h5 class="card-title mb-3"><%=comment.name%></h5> 
+              <p class="card-text"><%=comment.comment%></p>
+              <form action="/movies/<%=movie._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                  <button class="btn btn-sm btn-danger">delete</button>
+              </form>
+          </div> 
+          <br>
+       <%}%>
+      </div>
+      
+  </div>
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+              <p><b>hero:</b><%=movie.hero%></p>
+              <p><b>heroine:</b><%=movie.heroine%></p>
+      </div>
+      <div class="col">
+          <p><b>ott platform:</b><%=movie.ott%></p>
+      </div>
+      <div class="col">
+          <h1>reviews:</h1>
+          <div class="card-body">  
+              <p class="card-text"><%=movie.reviews%></p>
+          </div> 
+      </div>
+      
+  </div>
+</div>
+</div>
+
+<div>
+
+
+
+  data:[{
+    moviename:String,
+    comments:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Comment",
+        }
+    ]
+}]
+
+
+
+
+<div class="container">
+  <div class="row">
+      <div class="col">
+          <div class="col">
+              <div class="row">
+                  <div class="col">
+                      <img class="image-fluid" src="<%=movie.image%>" class="card-img-top" alt="no image" width="150em">
+                  </div>
+                  <div class="col">
+                      <h5 class="card-text">rating:<%=movie.rating%></h5> <br>
+                      <h5>language:<%=movie.language%></h5>
+                      <h5>genre:<%=movie.genre%></h5>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col">
+                      <p><b>hero:</b><%=movie.hero%></p>
+                      <p><b>heroine:</b><%=movie.heroine%></p>
+                  </div>
+                  <div class="col">
+                      <p><b>ott platform:</b><%=movie.ott%></p>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+      <div class="col">
+          <% for(let result of results){%>
+              <div class="row">
+                  <div class="col">
+                      <img class="img-fluid"src="<%=result.image%>" alt="no image"width="50em">
+                  </div>
+                  <div class="col">
+                      <%=result.name%>
+                      <%=result.rating%>
+                  </div>
+              </div>
+          </div>
+   <%}%> 
+      </div>
+      <div class="col">
+          <div class="col">
+              <h3>comments:</h3>
+              <% for(let comment of movie.comments){%>
+              <div class="card"style="border-width:1px"> 
+                  <h5 class="card-title mb-3"><%=comment.name%></h5> 
+                  <p class="card-text"><%=comment.comment%></p>
+                  <form action="/movies/<%=movie._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                      <button class="btn btn-sm btn-danger">delete</button>
+                  </form>
+              </div> 
+              <br>
+           <%}%>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+<form action="/<%=user._id%>/movies/<%=movie.id%>/reviews" method="POST">
+  <label class="form-label"for="review">add review:</label>
+  <textarea class="form-control"name="review" rows="5" cols="60" id="review"></textarea>
+  <button>submit</button>
+</form>
+
+
+
+http://localhost:3000/63a95e4c69a2cd0e0f020437/movies/63a9cd59b6383ba98c90542e/comments/63a95e4c69a2cd0e0f020437/movies/63a9cd59b6383ba98c90542e
+
+
+
+
+
+action="/<%=user._id%>/movies"method="POST"
+
+<form action="/<%=user._id%>/movies"method="POST" class="validated-form" enctype="multipart/form-data">
+  <div>
+     <div>
+         <label for="name"class="form-label">name:</label>
+         <input type="text"class="form-control" name="name"placeholder="name"id="name"required>
+         <div class="valid-feedback">proceed</div>
+      </div>
+      <div>
+         <label for="language"class="form-label">language:</label>
+         <select name="language" id="language">
+             <%for(let language of languages){%>
+                 <option value="<%=language%>"><%=language%></option>
+             <%}%>
+         </select>
+      </div>
+      <div>
+         <label for="genre"class="form-label">genre:</label>
+         <select name="genre" id="genre">
+             <%for(let genre of genres){%>
+                 <option value="<%=genre%>"><%=genre%></option>
+             <%}%>
+         </select>
+      </div>
+      <div>
+         <label for="rating"class="form-label">rating:</label>
+         <input type="text"class="form-control" name="rating"placeholder="rating"id="rating">
+      </div>
+      <div>
+         <label for="hero"class="form-label">hero:</label>
+         <input type="text"class="form-control" name="hero"placeholder="hero"id="hero">
+      </div>
+      <div>
+         <label for="heroine"class="form-label">heroine:</label>
+         <input type="text" class="form-control"name="heroine"placeholder="heroine"id="heroine">
+      </div>
+      <div>
+         <label for="storyline"class="form-label">story line:</label>
+         <textarea name="storyline" class="form-control"cols="30"rows="10"></textarea>
+      </div>
+      <div>
+         <label for="year"class="form-label">year:</label>
+         <input type="text"class="form-control" name="year"placeholder="year"id="year">
+      </div>
+      <div>
+         <label for="ott"class="form-label">ott:</label>
+         <input type="text"class="form-control" name="ott"placeholder="ott"id="ott">
+      </div>
+      <input type="file" name="image" id="">
+      <!-- <div>
+         <label for="image"class="form-label">image:</label>
+         <input type="text"class="form-control" name="image"id="image"placeholder="image url">
+      </div> -->
+      <div>
+         <button class="btn btn-success">ADD</button>
+      </div>
+  </div>
+ </form>
+ <!-- <script src="/validateforms.js"> </script> -->
+ 
+ <script>
+   // Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+'use strict'
+
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+const forms = document.querySelectorAll('.validated-form')
+
+// Loop over them and prevent submission
+Array.from(forms)
+ .forEach(function (form) {
+   form.addEventListener('submit', function (event) {
+     if (!form.checkValidity()) {
+       event.preventDefault()
+       event.stopPropagation()
+     }
+
+     form.classList.add('was-validated')
+   }, false)
+ })
+})()
+ </script>
+
+
+
+
+router.post("/signup",async(req,res)=>{
+  try{
+      const {username,password}=req.body;
+   const applieduser=new Credential({username});
+   console.log(applieduser)
+   const user=await Credential.register(applieduser,password)
+   const movies=await Movie.find({})
+   req.session.user_id=user._id;
+   res.redirect(`/movies`);
+   
+  }catch(e){
+      req.flash("error",e.message);
+      res.redirect("/signup")
+      
+  }
+   
+   
+   //req.session.user_id=user._id;
+   
+})
+
+
+router.post("/login",passport.authenticate("local",{failureFlash:true,failureRedirect:"/login"}),async(req,res)=>{
+    
+    
+  req.flash("success","logged in successfully")
+  res.redirect(`/movies`);
+
+})
+
+app.get("/fakeuser",async(req,res)=>{
+  const user=new User({email:"saiveer@gmail.com",username:"sreemangudla"})
+  const newuser=await User.register(user,"2004")
+  res.send(newuser)
+})
+
+
+router.post("/signup",async(req,res)=>{
+  const {username,password}=req.body;
+   const hashedpassword=await bcrypt.hash(password,12);
+   const user=new Credential({username,
+       password:hashedpassword})
+   const result=await user.save();
+   req.session.user_id=user._id;
+   const movies=await Movie.find({})
+   res.render("movies/show.ejs",{movies,languages,genres,user})
+})
+router.get("/adminsignup",(req,res)=>{
+  res.render("admin/signup.ejs")
+})
+router.get("/login",async(req,res)=>{
+  const {userid}=req.params;
+  const user=await Credential.findById(userid)
+
+  res.render("admin/signin.ejs",{user})
+})
+
+router.post("/login",async(req,res)=>{
+  const {username,password}=req.body;
+  const user=await Credential.findOne({username})
+  const result=await bcrypt.compare(password,user.password)
+  if(result)
+  {
+      req.session.user_id=user._id;
+      const movies=await Movie.find({})
+      res.redirect(`/${user._id}/movies`);
+  }else{
+      console.log("try again")
+  }
+})
+
+
+
+    class="validated-form" novalidate enctype="multipart/form-data"
+
+
+    <%for(let genre of genres){%>
+      <option value="<%=genre%>"><%=genre%></option>
+       
+    <%}%>
+
+    http://localhost:3000/movies/?genre=%2Fmovies%2F%3Fgenre%3Dnone&language=%2Fmovies%2F%3Flanguage%3Dnone
+
+
+
+    router.get("/search",async(req,res)=>{
+    if(req.query){
+        const query=true;
+          
+        const movies=await Movie.find(req.query);
+        res.render("movies/show.ejs",{movies,languages,genres,query})
+    }else{
+        res.send("nothing find")
+    }
+
+})
+
+
+<% for(let comment of user.comments){%>
+  <div class="card" mb-3 >
+      <div class="row">
+          
+          <div class="col">
+              <div>
+                  <h5 class="card-title"><%=comment.moviename%></h5>
+                  <p class="card-text"><%=comment.comment%></p>
+              </div>   
+          </div>
+          <div class="col">
+              <form action="/account/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                  <button class="btn btn-danger">delete</button>
+              </form>
+          </div>
+      </div>
+<%}%>
+
+
+<% for(let movie of movies){%>
+  <div class="card" mb-3 >
+      <div class="row">
+           <%movie.images.forEach((image,i)=>{%>
+          <div class="col <%=i===0?"active":""%>">
+           <%if(i==0){%>
+            <img src="<%=image.url%>" class="d-block w-100" alt="..." style="height:10em;width:10em">
+          <%}%>
+          </div>
+        <%})%>
+          <div class="col">
+              <div>
+                  <h5 class="card-title"><%=movie.name%></h5>
+                  <p ><b class="card-text">rating:</b><%=movie.rating%></p> 
+              </div>
+              
+          </div>
+          <div class="col">
+            <div >
+              <a class="btn btn-info"href="/movies/<%=movie._id%>">INFO </a>
+            <form action="/movies/<%=movie._id%>/watchlist" method="POST">
+              <button class="btn btn-warning mb-3">watchlist</button>
+            </form>
+            </div>
+          </div>
+
+      </div>
+      
+      <%}%> 
+
+
+      <form name="sort">
+        <select name="genre" id="genre">
+          <%for(let genre of genres){%>
+            <option value="<%=genre%>"><%=genre%></option>
+             
+          <%}%>
+        </select>
+        
+        <select name="language"  id="language">
+            <%for(let language of languages){%>
+                <option value="<%=language%>"><%=language%></option>
+            <%}%>
+        </select>
+        <div>
+            <button>submit</button>
+        </div>
+    </form>
+    
+</div>
+</div>
+
+
+
+<%for(let image of result.images){%>
+  <img class="img-thumbnail"src="<%=image.url%>" alt="no image"style="width:15em">
+<%}%>
+
+
+
+.container{
+
+}
+.Title:hover{
+    .container{
+
+    }
+    .Title__filled{
+        clip-path:polygon(0% 100%,0% 99%,100% 100% 100%);
+    
+    }
+    .Title__underline{
+        top: 0;
+    clip-path: polygon (0% 100%, 0% 99%, 100% 99%,
+    100% 100%);
+    transition: clip-path 600ms cubic-bezier(0.2,
+    0.1, 0.15, 1.32);
+    }
+    .Title:hover {
+        .container{
+            
+        }
+        .Title__filled {
+        clip-path: polygon (0% 100%, 0% 0%, 100% 0%,
+        100% 100%);
+        }
+        .Title__underline {
+        transform: translateY(-9em);
+        }
+        .Title__highlight {
+            transform: translateY(-2.2em);
+            }
+        
+    }
+            
+    }
+
+
+
+    .button{
+      animation:shake 2s infinite;
+      background-color: white;
+      size: 10em;
+  }
+  @keyframes shake{
+      10%{transform:scale(1.05)rotate(5deg);}
+      20%{transform:scale(1.05)rotate(-5deg);}
+      30%{transform:scale(1.05)rotate(5deg);}
+      40%{transform:none;}
+  }
+    
+
+
+  @import url('https://fonts.googleapis.com/css2?
+family-Nunito+Sans:wght@200&display=swap' );
+    
+
+
+<div class="d-grid gap-2">
+  <form action="/movies/<%=movie._id%>/watchlist" method="POST">
+      <button class="btn btn-warning" type="button">watchlist</button>
+  </form>
+  <a class="btn btn-primary" href="/account/watchlist"type="button">my watchlist</a>
+</div>
+<div class="container">
+<div class="row">
+  <div class="col">
+    <div class="container">
+      <div class="row">
+        <%if(results){%>
+          <% for(let result of results){%>
+            <%if(movie.rating<=result.rating){%>
+              <%result.images.forEach((image,i)=>{%>
+        <div class="col">
+                  <div class="col <%=i===0?"active":""%>">
+                    <%if(i==0){%>
+                     <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="height:10em;width:10em" >
+                   <%}%>
+                   </div>
+                 <%})%>
+        </div>
+        <div class="col">
+          <p><b></b><%=result.name%></p>
+              <p><b>rating:</b><%=result.rating%></p>
+        </div>
+        <div class="col">
+          <a class="btn btn-info"href="/movies/<%=movie._id%>">INFO </a>
+          <form action="/movies/<%=movie._id%>/watchlist" method="POST">
+            <button class="btn btn-warning mb-3">watchlist</button>
+          </form>
+          <%}%>
+          <%}%>
+        </div>
+      </div>
+    </div>
+    
+         
+      
+    <%}%>
+  </div>
+  <div class="col">
+    <div class="col-md-12">
+      <%if(currentuser){%>
+        <form action="/movies/<%=movie.id%>/comments" method="POST">
+          <label class="form-label"for="name">name:</label>
+          <input class="form-control"name="comment[name]"  id="name"value="<%=currentuser.username%>">
+          <label class="form-label"for="moviename">moviename:</label>
+          <input class="form-control"name="comment[moviename]"  id="moviename"value="<%=movie.name%>">
+          <label class="form-label"for="comment">add comment:</label>
+          <textarea class="form-control"name="comment[comment]" rows="5" cols="60" id="comment"></textarea>
+          <button>submit</button>
+      </form>
+      <%}%>
+
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card" style="width:35em">
+        <div class="container">
+         <div class="row">
+          <%if(results){%>
+            <% for(let result of results){%>
+              <%if(movie.rating<=result.rating){%>
+                <%result.images.forEach((image,i)=>{%>
+          
+            <div class="col">
+              <div class="col <%=i===0?"active":""%>">
+                <%if(i==0){%>
+                 <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="height:10em;width:10em" >
+               <%}%>
+               </div>
+             <%})%>
+            
+            </div>
+            <div class="col">
+              <p><b></b><%=result.name%></p>
+              <p><b>rating:</b><%=result.rating%></p>
+     
+            </div>
+            <div class="col">
+                <a class="btn btn-info"href="/movies/<%=movie._id%>">INFO </a>
+                <form action="/movies/<%=movie._id%>/watchlist" method="POST">
+                  <button class="btn btn-warning mb-3">watchlist</button>
+                </form>
+              <%}%>
+              <%}%>
+              <%}%>
+            </div>
+          
+         </div>
+        </div>
+    </div>
+  
+    <div class="col">
+      <div class="col-md-12">
+        <%if(currentuser){%>
+          <form action="/movies/<%=movie.id%>/comments" method="POST">
+            <label class="form-label"for="name">name:</label>
+            <input class="form-control"name="comment[name]"  id="name"value="<%=currentuser.username%>">
+            <label class="form-label"for="moviename">moviename:</label>
+            <input class="form-control"name="comment[moviename]"  id="moviename"value="<%=movie.name%>">
+            <label class="form-label"for="comment">add comment:</label>
+            <textarea class="form-control"name="comment[comment]" rows="5" cols="60" id="comment"></textarea>
+            <button>submit</button>
+        </form>
+        <%}%>
+
+      </div>
+    </div>
+  </div>
+ </div><div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card" style="width:35em">
+        <div class="container">
+         <div class="row">
+          <%if(results){%>
+            <% for(let result of results){%>
+              <%if(movie.rating<=result.rating){%>
+                <%result.images.forEach((image,i)=>{%>
+          
+            <div class="col">
+              <div class="col <%=i===0?"active":""%>">
+                <%if(i==0){%>
+                 <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="height:10em;width:10em" >
+               <%}%>
+               </div>
+             <%})%>
+            
+            </div>
+            <div class="col">
+              <p><b></b><%=result.name%></p>
+              <p><b>rating:</b><%=result.rating%></p>
+     
+            </div>
+            <div class="col">
+                <a class="btn btn-info"href="/movies/<%=movie._id%>">INFO </a>
+                <form action="/movies/<%=movie._id%>/watchlist" method="POST">
+                  <button class="btn btn-warning mb-3">watchlist</button>
+                </form>
+              <%}%>
+              <%}%>
+              <%}%>
+            </div>
+          
+         </div>
+        </div>
+    </div>
+  
+    <div class="col">
+      <div class="col-md-12">
+        <%if(currentuser){%>
+          <form action="/movies/<%=movie.id%>/comments" method="POST">
+            <label class="form-label"for="name">name:</label>
+            <input class="form-control"name="comment[name]"  id="name"value="<%=currentuser.username%>">
+            <label class="form-label"for="moviename">moviename:</label>
+            <input class="form-control"name="comment[moviename]"  id="moviename"value="<%=movie.name%>">
+            <label class="form-label"for="comment">add comment:</label>
+            <textarea class="form-control"name="comment[comment]" rows="5" cols="60" id="comment"></textarea>
+            <button>submit</button>
+        </form>
+        <%}%>
+
+      </div>
+    </div>
+  </div>
+ </div>
