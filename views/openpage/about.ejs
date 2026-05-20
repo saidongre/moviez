@@ -1,61 +1,38 @@
-<%layout("./layouts/boilerplate")%>
-<link rel="stylesheet" href="/stylesheets/about.css">
-    <h1>here comes information</h1>
-    <body>
-        <h1>Flip Cards Responsive</h1>
-        <div class="boxesContainer">
-        <div class="cardBox">
-        <div class="card">
-        <div class="front">
-        <h3>watchlists</h3>
-        <p>Hover to flip</p>
-        <strong>&#x21bb; </strong>
-        </div>
-        <div class="back">
-        <h3>Back Side One</h3>
-        <p>you can watchlist the movies u want to see</p>
-        <a href="#">Button 1</a>
-        </div>
-        </div>
-        </div>
-        <div class="cardBox">
-        <div class="card">
-        <div class="front">
-        <h3>Rating</h3>
-        <p>Hover to flip</p>
-        <strong>&#x21bb; </strong>
-        </div>
-        <div class="back">
-        </div>
-        <h3>Back Side Two</h3>
-        <p>ratings of the movie are given according to the public talk</p>
-        <a href="#">Button 2</a>
-        </div>
-        </div>
-        <div class="cardBox">
-            <div class="card">
-            <div class="front">
-            <h3>comments</h3>
-            <p>Hover to flip</p>
-            <strong>&#x21bb; </strong>
-            </div>
-            <div class="back">
-            <h3>Back Side Three</h3>
-            <p>you can see comments assaigned to a movie .make sure reported in other cases</p>
-            <a href="#">Button 3</a>
-            </div>
-            </div>
-            </div>
-            <div class="cardBox">
-            <div class="card">
-            <div class="front">
-            <h3>movie selection</h3>
-            <p>Hover to flip</p>
-            <strong>&#x21bb; </strong>
-            </div>
-            <div class="back">
-            <h3>Back Side Four</h3>
-            <p>you can selesct mvie according to the genre u like</p>
-            <a href="#">Button 4</a>
-            </div>
-            </div>
+<% layout("./layouts/boilerplate") %>
+<div class="text-center mb-5">
+  <h1 class="display-5 text-warning fw-bold"><i class="bi bi-info-circle me-2"></i>About Moviez</h1>
+  <p class="text-secondary">Everything you need to track and discover great films.</p>
+</div>
+<div class="row g-4 justify-content-center">
+  <div class="col-md-3">
+    <div class="card bg-secondary bg-opacity-10 border-secondary h-100 text-center p-3">
+      <i class="bi bi-bookmark-heart-fill text-warning fs-1 mb-3"></i>
+      <h5 class="text-warning">Watchlist</h5>
+      <p class="text-secondary small">Save movies you want to watch later to your personal watchlist.</p>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-secondary bg-opacity-10 border-secondary h-100 text-center p-3">
+      <i class="bi bi-star-fill text-warning fs-1 mb-3"></i>
+      <h5 class="text-warning">Ratings</h5>
+      <p class="text-secondary small">See ratings for every movie and find the best ones to watch.</p>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-secondary bg-opacity-10 border-secondary h-100 text-center p-3">
+      <i class="bi bi-chat-dots-fill text-warning fs-1 mb-3"></i>
+      <h5 class="text-warning">Comments</h5>
+      <p class="text-secondary small">Share your thoughts on any movie and read what others think.</p>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-secondary bg-opacity-10 border-secondary h-100 text-center p-3">
+      <i class="bi bi-funnel-fill text-warning fs-1 mb-3"></i>
+      <h5 class="text-warning">Filter</h5>
+      <p class="text-secondary small">Filter movies by genre and language to find exactly what you want.</p>
+    </div>
+  </div>
+</div>
+<div class="text-center mt-5">
+  <a href="/movies" class="btn btn-warning btn-lg">Browse Movies</a>
+</div>

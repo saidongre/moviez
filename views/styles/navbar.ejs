@@ -1,42 +1,107 @@
-<%layout("./layouts/boilerplate")%>
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Moviez</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-panel"
+  style="background: rgba(10, 10, 15, 0.85); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px 0; transition: all 0.3s ease; z-index: 1030;">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="/movies"
+      style="font-family: var(--font-heading); font-size: 2rem; color: var(--accent-primary); letter-spacing: 2px; text-shadow: 0 0 15px var(--accent-glow);">
+      <i class="bi bi-play-circle-fill me-2"></i>MOVIEZ
+    </a>
+
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navMain">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-4" style="font-family: var(--font-body); font-weight: 500;">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/movies">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/account">Account</a>
+          <a class="nav-link nav-effect px-3" href="/movies"><i class="bi bi-house me-1"></i> Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/new">Add</a>
+          <a class="nav-link nav-effect px-3" href="/movies/filter"><i class="bi bi-funnel me-1"></i> Discover</a>
         </li>
-        
-        
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-        <form action="/logout"method="POST"class="d-flex"> 
-          <button class="btn btn-outline-success" type="submit">logout</button>
-        </form>
+
+        <% if (currentuser) { %>
+          <li class="nav-item">
+            <a class="nav-link nav-effect px-3 text-white" href="/movies/new"><i
+                class="bi bi-plus-circle me-1 text-danger"></i> Add Movie</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-effect px-3" href="/account/watchlist"><i class="bi bi-bookmark-heart me-1"></i>
+              Watchlist</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-effect px-3" href="/account"><i class="bi bi-person-circle me-1"></i>
+              <%= currentuser.username %>
+            </a>
+          </li>
+          <% } %>
+
+            <li class="nav-item">
+              <a class="nav-link nav-effect px-3" href="/about"><i class="bi bi-info-circle me-1"></i> About</a>
+            </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+
+      <div class="d-flex align-items-center gap-3 mt-2 mt-lg-0">
+        <form class="position-relative search-form" action="/movies/search" method="GET">
+          <i class="bi bi-search position-absolute text-muted"
+            style="top: 50%; left: 12px; transform: translateY(-50%); pointer-events: none;"></i>
+          <input class="form-control bg-transparent text-light cinematic-input" type="search" name="dsearch"
+            placeholder="Titles, genres..."
+            style="padding-left: 36px; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; width: 200px; transition: all 0.3s ease;">
+        </form>
+
+        <div class="d-flex gap-2">
+          <% if (!currentuser) { %>
+            <a class="btn-cinematic-outline text-decoration-none" href="/login">Login</a>
+            <a class="btn-cinematic text-decoration-none" href="/signup">Sign Up</a>
+            <% } else { %>
+              <a class="btn-cinematic-outline text-decoration-none"
+                style="border-color: rgba(229, 9, 20, 0.5); color: #fff;" href="/logout">Logout</a>
+              <% } %>
+        </div>
+      </div>
     </div>
   </div>
 </nav>
+
+<style>
+  /* Scoped Navbar Styles */
+  .nav-effect {
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .nav-effect::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--accent-primary);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+    box-shadow: 0 0 8px var(--accent-primary);
+  }
+
+  .nav-effect:hover {
+    color: #fff !important;
+  }
+
+  .nav-effect:hover::after {
+    width: 70%;
+  }
+
+  .cinematic-input:focus {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 15px rgba(229, 9, 20, 0.3) !important;
+    width: 250px !important;
+    color: #fff;
+  }
+
+  /* Offset body so content doesn't hide behind fixed navbar */
+  body {
+    padding-top: 76px;
+  }
+</style>

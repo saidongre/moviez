@@ -1,103 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 
-<link rel="stylesheet" href="/stylesheets/home.css">
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-reels" viewBox="0 0 16 16">
-    <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM1 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0z"/>
-    <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7zm6 8.73V7.27l-3.5 1.555v4.35l3.5 1.556zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z"/>
-    <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
-  </svg>
-<i class="bi bi-camera-reels"></i>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moviez | The Cinematic Experience</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050505;
+      --accent: #e50914;
+      /* Netflix Red */
+      --card: #111111;
+    }
 
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: white;
+      margin: 0;
+      overflow-x: hidden;
+    }
 
-    
+    .font-serif {
+      font-family: 'Playfair Display', serif;
+    }
 
-<header>
-    <div class="container">
-      <nav>
-      <ul class="nav-container">
-          
-          <li class="nav-item has-subnav">
-            <a href="#">INFO</a>
-                <div class="subnav">
-                  <ul>
-                   <li>watchlist</li>
-                   <li>comment</li>
-                   <li>ratings</li>
-                   <li>movieselection</li>
-                  </ul>
-                </div>
-          </li>
-        
-        </ul>
-      </nav>
-    </div>
-    </header>
-    
-    <div class="accordion">
-      <ul>
-        <li>
-          <div class="image_title">
-            <a href="#">Transformers: The Last Knight</a>
-          </div>
-          <a href="https://ibb.co/gGv6QS"><img src="https://image.ibb.co/k7P0kS/transformers4_640x320.jpg" alt="transformers4_640x320" border="0"></a>
-        </li>
-        <li>
-          <div class="image_title">
-            <a href="#">Blade Runner 2049</a>
-          </div>
-          <a href="https://ibb.co/cXjfKn"><img src="https://image.ibb.co/ct9rQS/Blade_Runner2049_640x320.jpg" alt="Blade_Runner2049_640x320" border="0"></a>
-        </li>
-        <li>
-          <div class="image_title">
-            <a href="#">Guardians of the Galaxy: Vol. 2</a>
-          </div>
-          <a href="https://ibb.co/b4nLkS"><img src="https://image.ibb.co/jAu0kS/GOG2_640x320.jpg" alt="GOG2_640x320" border="0"></a>
-        </li>
-        <li>
-          <div class="image_title">
-            <a href="#">Spiderman: Homecoming</a>
-          </div>
-          <a href="https://ibb.co/mC5Uen"><img src="https://image.ibb.co/da7xX7/spiderman_homecoming_640x320.jpg" alt="spiderman_homecoming_640x320" border="0"></a>
-        </li>
-        <li>
-          <div class="image_title">
-            <a href="#">Wonder Woman</a>
-          </div>
-          <a href="https://ibb.co/enV1s7"><img src="https://image.ibb.co/dHdAkS/Wonder_Woman_640x320.jpg" alt="Wonder_Woman_640x320" border="0"></a>
-        </li>
-      </ul>
-    </div>
-    <div class="maintitle">
-        <div class="Title">
-            <h1>MovieZ
-                <div class="Title__highlight"></div>
+    /* Reveal Animation Styles */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Custom Floating Animations */
+    @keyframes float-hand-left {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0);
+      }
+
+      50% {
+        transform: translateY(-20px) rotate(2deg);
+      }
+    }
+
+    @keyframes float-hand-right {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0);
+      }
+
+      50% {
+        transform: translateY(20px) rotate(-2deg);
+      }
+    }
+
+    .animate-float-left {
+      animation: float-hand-left 12s ease-in-out infinite;
+    }
+
+    .animate-float-right {
+      animation: float-hand-right 14s ease-in-out infinite;
+    }
+
+    /* Noise Texture Overlay */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      opacity: 0.05;
+      mix-blend-mode: overlay;
+      background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    }
+
+    /* Parallax Container Effect */
+    .parallax-card-up {
+      transform: translateY(var(--scroll-offset-up, 0px));
+    }
+
+    .parallax-card-down {
+      transform: translateY(var(--scroll-offset-down, 0px));
+    }
+  </style>
+</head>
+
+<body>
+  <div class="min-h-screen bg-[#050505] selection:bg-[#e50914] selection:text-white">
+    <!-- Global Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-8">
+      <div class="container mx-auto px-6 flex items-center justify-between">
+        <a href="/" id="nav-logo-link" class="text-3xl font-bold tracking-tighter text-[#e50914] font-serif">
+          Moviez.
+        </a>
+
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="/movies" id="nav-expertise-link"
+            class="text-sm text-gray-400 hover:text-white transition-colors duration-300">Discover Movies</a>
+          <a href="/movies/filter" id="nav-works-link"
+            class="text-sm text-gray-400 hover:text-white transition-colors duration-300">Filter Library</a>
+        </div>
+
+        <% if (!currentuser) { %>
+          <a href="/login" id="nav-cta-link"
+            class="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium bg-white text-black hover:scale-105 hover:bg-gray-200 transition-all duration-300">
+            Sign In
+          </a>
+          <% } else { %>
+            <a href="/logout" id="nav-cta-link"
+              class="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium border border-white/20 text-white hover:bg-white/10 transition-all duration-300">
+              Sign Out (<%= currentuser.username %>)
+            </a>
+            <% } %>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 pb-20 bg-[#050505]">
+      <!-- Background Atmosphere -->
+      <div class="absolute inset-0 z-0 pointer-events-none select-none">
+        <div class="absolute top-0 left-0 w-full h-full opacity-60 mix-blend-screen">
+          <img src="https://framerusercontent.com/images/9zvwRJAavKKacVyhFCwHyXW1U.png?width=1536&height=1024"
+            alt="Atmosphere" class="w-full h-full object-cover object-center opacity-80">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050505] z-10"></div>
+      </div>
+
+      <!-- Floating Surrealist Elements -->
+      <div
+        class="absolute -left-[10%] top-[-10%] md:left-[-5%] md:top-[-15%] w-[50vw] md:w-[40vw] max-w-[800px] z-10 pointer-events-none mix-blend-hard-light opacity-80 animate-float-left">
+        <img src="https://framerusercontent.com/images/KNhiA5A2ykNYqNkj04Hk6BVg5A.png?width=1540&height=1320"
+          alt="Hand Reaching" class="w-full h-auto object-contain">
+      </div>
+
+      <div
+        class="absolute -right-[10%] bottom-[-10%] md:right-[-5%] md:bottom-[-5%] w-[45vw] md:w-[35vw] max-w-[700px] z-10 pointer-events-none mix-blend-hard-light opacity-80 animate-float-right">
+        <img src="https://framerusercontent.com/images/X89VFCABCEjjZ4oLGa3PjbOmsA.png?width=1542&height=1002"
+          alt="Hand Receiving" class="w-full h-auto object-contain">
+      </div>
+
+      <!-- Hero Content -->
+      <div class="container mx-auto px-6 relative z-20 text-center flex flex-col items-center justify-center h-full">
+        <div id="hero-content-wrapper" class="max-w-4xl mx-auto">
+          <div class="reveal">
+            <h1
+              class="text-5xl md:text-7xl font-medium leading-[1.1] tracking-tight mb-6 text-[#ffe0e0] mix-blend-overlay font-serif"
+              style="text-shadow: 0 0 12px rgba(255,255,255,0.71);">
+              Moviez. <br />
+              <span class="italic font-light text-[#ffe0e0]">The cinematic experience.</span>
             </h1>
-            <div class="Title__underline"></div>
-            <div area-hidden class="Title__filled">Moviez</div>
+          </div>
+
+          <div class="reveal" style="transition-delay: 200ms;">
+            <p class="text-base md:text-lg text-[#ffe0e0]/90 max-w-lg mx-auto mb-16 font-light tracking-wide leading-relaxed mix-blend-overlay"
+              style="text-shadow: 0 0 12px rgba(255,255,255,0.71);">
+              We turn the unseen into the unforgettable. The premium destination to review, track, and curate your
+              personal cinematic obsession.
+            </p>
+          </div>
+
+          <div class="reveal flex flex-col items-center gap-6" style="transition-delay: 400ms;">
+            <a href="/movies" class="relative group cursor-pointer text-decoration-none">
+              <div
+                class="absolute inset-0 bg-[#e50914]/20 blur-xl rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-500">
+              </div>
+              <div
+                class="relative border border-white/20 bg-white/5 backdrop-blur-sm px-8 py-3 rounded-full flex items-center gap-3 text-sm text-white uppercase tracking-widest hover:bg-[#e50914] hover:border-transparent transition-all duration-300">
+                <span>Explore Movies</span>
+              </div>
+            </a>
+
+            <div
+              class="flex items-center gap-4 text-[10px] md:text-xs text-white/40 uppercase tracking-widest mt-8 font-mono">
+              <span id="current-time">11:11 PM</span>
+              <span class="w-px h-3 bg-white/20"></span>
+              <span>HOLLYWOOD, USA</span>
+            </div>
+          </div>
         </div>
-    </div>
-        
-        
-    <div display="incline-block">
-        <div class="example">
-            <button>
-                <span><a href="/login">login</a></span>
-            </button>
+      </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="expertise" class="py-32 relative">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center reveal">
+          <h2 class="text-3xl md:text-5xl lg:text-6xl leading-tight text-white/90 mb-12 font-serif">
+            Track every frame of your journey.
+          </h2>
+          <p class="text-xl md:text-2xl text-gray-500 leading-relaxed font-light">
+            Never forget what you watched. Curate your tastes, write reviews, and share the passion.
+          </p>
         </div>
-        <div class="example">
-            <button>
-                <span><a href="/signup">signup</a></span>
-            </button>
+
+        <!-- Logo Grid -->
+        <div
+          class="mt-32 grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+          <div class="reveal font-bold text-xl tracking-widest text-[#e50914]">NETFLIX</div>
+          <div class="reveal font-bold text-xl tracking-widest text-blue-400" style="transition-delay: 100ms;">PRIME
+          </div>
+          <div class="reveal font-bold text-xl tracking-widest" style="transition-delay: 200ms;">HULU</div>
+          <div class="reveal font-bold text-xl tracking-widest text-purple-500" style="transition-delay: 300ms;">MAX
+          </div>
         </div>
-        <div class="example">
-            <button>
-                <span><a href="/about">about</a></span>
-            </button>
+      </div>
+    </section>
+
+    <!-- Cards Section -->
+    <section id="works" class="py-40 relative overflow-hidden">
+      <div class="container mx-auto px-6 relative z-10">
+        <div class="reveal mb-32">
+          <h2 class="text-5xl md:text-7xl text-center font-serif">
+            Define your <br />
+            <span class="italic text-[#e50914]">watchlist</span>
+          </h2>
         </div>
-        <div class="example">
-            <button>
-                <span><a href="/movies">guest</a></span>
-            </button>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <!-- Card 1 - Red -->
+          <div class="parallax-card-down">
+            <div
+              class="reveal bg-[#e50914] rounded-3xl p-8 md:p-12 aspect-[4/5] flex flex-col justify-between shadow-2xl hover:shadow-[0_20px_50px_rgba(229,9,20,0.3)] transition-all duration-500 group cursor-pointer"
+              onclick="window.location.href='/movies'">
+              <div class="flex justify-between items-start">
+                <div
+                  class="w-12 h-12 rounded-full bg-black/10 flex items-center justify-center group-hover:rotate-45 transition-transform duration-500">
+                  <iconify-icon icon="lucide:film" class="text-white text-2xl"></iconify-icon>
+                </div>
+                <span class="text-white font-medium text-sm border border-white/20 px-3 py-1 rounded-full">01</span>
+              </div>
+
+              <div>
+                <h3 class="text-4xl md:text-5xl text-white mb-4 leading-none tracking-tight font-serif">
+                  Browse <br />Library
+                </h3>
+                <p class="text-white/80 text-lg leading-snug">
+                  A continuously expanding collection of gems waiting to be discovered.
+                </p>
+              </div>
+
+              <div class="w-full h-px bg-white/20 mt-8"></div>
+            </div>
+          </div>
+
+          <!-- Card 2 - Black -->
+          <div class="parallax-card-up md:mt-24">
+            <div
+              class="reveal bg-[#111] border border-white/10 rounded-3xl p-8 md:p-12 aspect-[4/5] flex flex-col justify-between shadow-2xl group cursor-pointer hover:border-[#e50914]/50 transition-all duration-500"
+              style="transition-delay: 150ms;" onclick="window.location.href='/signup'">
+              <div class="flex justify-between items-start">
+                <div
+                  class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                  <iconify-icon icon="lucide:arrow-right" class="text-white text-2xl -rotate-45"></iconify-icon>
+                </div>
+                <span class="text-white/50 font-medium text-sm border border-white/10 px-3 py-1 rounded-full">02</span>
+              </div>
+
+              <div>
+                <h3 class="text-4xl md:text-5xl text-white mb-4 leading-none tracking-tight font-serif">
+                  Join the <br />Community
+                </h3>
+                <p class="text-gray-400 text-lg leading-snug">
+                  Create your account to rate, review, and curate movies to your personal watchlist.
+                </p>
+              </div>
+
+              <div class="w-full h-px bg-white/10 mt-8"></div>
+            </div>
+          </div>
         </div>
-    </div>
-        
-    </div>
+      </div>
+
+      <!-- Background Pattern -->
+      <div
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] opacity-10 pointer-events-none"
+        style="background-image: radial-gradient(circle, #333 1px, transparent 1px); background-size: 40px 40px;">
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 bg-[#050505] relative overflow-hidden">
+      <div class="container mx-auto px-6 relative z-10">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
+          <div class="w-full md:w-auto">
+            <h2
+              class="text-[10vw] leading-[0.8] tracking-tighter text-[#e50914]/20 font-bold select-none pointer-events-none font-serif">
+              MOVIEZ.
+            </h2>
+          </div>
+
+          <div class="flex flex-col gap-4 text-right">
+            <p class="text-sm text-gray-600">© <%= new Date().getFullYear() %> Moviez App. Built for film lovers.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // 1. Reveal Elements on Scroll using Intersection Observer
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // 2. Navbar Scroll Effect
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.classList.add('py-4', 'bg-[#050505]/80', 'backdrop-blur-md', 'border-b', 'border-white/5');
+        nav.classList.remove('py-8', 'bg-transparent');
+      } else {
+        nav.classList.remove('py-4', 'bg-[#050505]/80', 'backdrop-blur-md', 'border-b', 'border-white/5');
+        nav.classList.add('py-8', 'bg-transparent');
+      }
+    });
+
+    // 3. Simple Parallax Logic
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      // Move cards in opposite directions slightly for depth
+      document.querySelectorAll('.parallax-card-up').forEach(el => {
+        el.style.setProperty('--scroll-offset-up', `${scrolled * -0.05}px`);
+      });
+      document.querySelectorAll('.parallax-card-down').forEach(el => {
+        el.style.setProperty('--scroll-offset-down', `${scrolled * 0.05}px`);
+      });
+    });
+
+    // 4. Update Time Clock
+    function updateTime() {
+      const clockEl = document.getElementById('current-time');
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      clockEl.textContent = `${hours}:${minutes} ${ampm}`;
+    }
+    setInterval(updateTime, 60000);
+    updateTime();
+
+    // 5. Hero Content Parallax
+    const heroWrapper = document.getElementById('hero-content-wrapper');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      if (scrolled < 1000) {
+        heroWrapper.style.transform = `translateY(${scrolled * 0.4}px)`;
+        heroWrapper.style.opacity = Math.max(0, 1 - scrolled / 600);
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,50 +1,40 @@
-
-<%layout("./layouts/boilerplate")%>
-<h1>edit credential</h1>
-    <form action="/account?_method=PUT"method="POST">
-     <div>
-        <div>
-            <label for="username"class="form-label">name:</label>
-            <input type="text"class="form-control" name="username"id="username"required value="<%=user.username%>">
-         </div>
-         <div>
-            <label for="preflang"class="form-label">preflang:</label>
-            <select name="preflang" id="preflang">
-                <%for(let language of languages){%>
-                    <option value="<%=language%>"<%=user.preflang===language?"selected":""%>><%=language%></option>
-                <%}%>
-            </select>
-         </div>
-         <div>
-            <label for="favgenre"class="form-label">favgenre:</label>
-            <select name="favgenre" id="favgenre">
-                <%for(let genre of genres){%>
-                    <option value="<%=genre%>"<%=user.favgenre===genre?"selected":""%>><%=genre%></option>
-                <%}%>
-            </select>
-         </div>
-         
-         <div>
-            <label for="password"class="form-label">password:</label>
-            <input type="text"class="form-control" name="password"id="password"value="<%=user.password%>">
-         </div>
-         <div>
-            <label for="email"class="form-label">email:</label>
-            <input type="text"class="form-control" name="email"id="email"value="<%=user.email%>">
-         </div>
-        
-         
-        
-         
-         <div>
-            <label for="image"class="form-label">image:</label>
-            <input type="text"class="form-control" name="image"id="image" value="<%=user.image%>">
-         </div>
-        
-            <button>submit</button>
-         </div>
-     </div>
+<% layout("./layouts/boilerplate") %>
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <h3 class="text-warning mb-4"><i class="bi bi-person-gear me-2"></i>Edit Profile</h3>
+    <form action="/account?_method=PUT" method="POST">
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control bg-dark text-light border-secondary" value="<%= user.username %>" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control bg-dark text-light border-secondary" value="<%= user.email || '' %>">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Profile Image URL</label>
+        <input type="text" name="image" class="form-control bg-dark text-light border-secondary" value="<%= user.image || '' %>" placeholder="https://...">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Favourite Genre</label>
+        <select name="favgenre" class="form-select bg-dark text-light border-secondary">
+          <% for (let g of genres) { %>
+            <option value="<%= g %>" <%= user.favgenre === g ? 'selected' : '' %>><%= g %></option>
+          <% } %>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Preferred Language</label>
+        <select name="preflang" class="form-select bg-dark text-light border-secondary">
+          <% for (let l of languages) { %>
+            <option value="<%= l %>" <%= user.preflang === l ? 'selected' : '' %>><%= l %></option>
+          <% } %>
+        </select>
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-warning"><i class="bi bi-save me-1"></i>Save</button>
+        <a href="/account" class="btn btn-outline-secondary">Cancel</a>
+      </div>
     </form>
-    <br>
-    <a class="btn btn-primary"href="/account">back</a>
-    
+  </div>
+</div>

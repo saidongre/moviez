@@ -1,6 +1,8 @@
-<%layout("./layouts/boilerplate")%>
-
-<div class="alert alert-danger" role="alert">
-    <h4 class="alert-heading"><%=err.message%></h4>
-    <p><%=err.stack%></p>
+<% layout("./layouts/boilerplate") %>
+<div class="d-flex justify-content-center align-items-center" style="min-height:60vh">
+  <div class="text-center">
+    <h1 class="display-1 text-danger fw-bold"><%= err.statuscode || 500 %></h1>
+    <h4 class="text-warning"><%= err.message %></h4>
+    <a href="/movies" class="btn btn-warning mt-3">Back to Movies</a>
+  </div>
 </div>

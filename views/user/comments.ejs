@@ -1,23 +1,28 @@
+<% layout("./layouts/boilerplate") %>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="text-warning mb-0"><i class="bi bi-chat-dots me-2"></i>My Comments</h3>
+  <a href="/account" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+</div>
 
+<% if (user.comments.length === 0) { %>
+  <div class="text-center text-secondary py-5">
+    <i class="bi bi-chat fs-1 d-block mb-2"></i>
+    <p>You haven't posted any comments yet.</p>
+  </div>
+<% } %>
 
-
-<%layout("./layouts/boilerplate")%>
-<%-include("../styles/flash.ejs")%>
-<link rel="stylesheet" href="/stylesheets/movieshow.css">
-<h1>comments</h1>
-
-
-
-<% for(let comment of user.comments){%>
-    <div class="card" style="width: 18rem;">
-        <!-- <img src="..." class="card-img-top" alt="..."> -->
+<div class="row row-cols-1 row-cols-md-2 g-3">
+  <% for (let comment of user.comments) { %>
+    <div class="col">
+      <div class="card bg-secondary bg-opacity-10 border-secondary">
         <div class="card-body">
-          <h5 class="card-title"><%=comment.moviename%></h5>
-          <p class="card-text"><%=comment.comment%></p>
-          <form action="/account/comments/<%=comment._id%>?_method=DELETE" method="POST">
-            <button class="btn btn-danger">delete</button>
-        </form>
+          <h6 class="text-warning mb-1"><i class="bi bi-film me-1"></i><%= comment.moviename || '—' %></h6>
+          <p class="text-light small mb-2"><%= comment.comment %></p>
+          <form action="/account/comments/<%= comment._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>Delete</button>
+          </form>
         </div>
       </div>
-<%}%>
-<a href="/account" class="btn btn-secondary">back</a>
+    </div>
+  <% } %>
+</div>

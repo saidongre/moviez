@@ -1,120 +1,55 @@
+<% layout("./layouts/boilerplate") %>
+<h3 class="text-warning mb-4"><i class="bi bi-funnel me-2"></i>Filter Movies</h3>
 
-<%layout("./layouts/boilerplate")%>
-<link rel="stylesheet" href="/stylesheets/movieshow.css">
-
-
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">Moviez</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/movies">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/movies/new">add</a>
-        </li>
-        <%if(currentuser){%>  
-        <li class="nav-item">
-          <a class="nav-link" href="/account">Account</a>
-        </li>
-        <%}%>
-        
-        
-      </ul>
-         <div class="navbar-nav ml-auto">
-          <%if(!currentuser){%>
-            <li class="nav-item">
-              <a class="nav-link " href="/login">login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/signup">signup</a>
-            </li>
-          <%}else{%>
-            <li class="nav-item">
-              <a class="nav-link" href="/logout">logout</a>
-            </li>
-            <%}%>
-         </div>
-
-    </div>
+<form action="/movies/filter" method="GET" class="row g-3 mb-4">
+  <div class="col-md-4">
+    <label class="form-label">Genre</label>
+    <select name="genre" class="form-select bg-dark text-light border-secondary">
+      <option value="none">-- Any Genre --</option>
+      <% for (let g of genres) { %>
+        <% if (g !== 'none') { %><option value="<%= g %>"><%= g %></option><% } %>
+      <% } %>
+    </select>
   </div>
- </nav>   <br>
- <%-include("../styles/flash.ejs")%>
-    
-    <div class="container">
-        <div class="row">
-            <div class="col-7">
-              
-                <form name="sort">
-                    <select name="genre" id="genre">
-                      <%for(let genre of genres){%>
-                        <option value="<%=genre%>"><%=genre%></option>
-                         
-                      <%}%>
-                    </select>
-                    
-                    <select name="language"  id="language">
-                        <%for(let language of languages){%>
-                            <option value="<%=language%>"><%=language%></option>
-                        <%}%>
-                    </select>
-                    <div>
-                        <button>submit</button>
-                    </div>
-                </form>
-                
-            </div>
-        </div>
-    </div>
-   
-    <div class="container">
-        <% for(let movie of movies){%>
-        <div class="card">
-          <div class="row">
-            <div class="col">
-              <%movie.images.forEach((image,i)=>{%>
-                <div class="col <%=i===0?"active":""%>">
-                  <%if(i==0){%>
-                   <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="width:10em;height:10em" >
-                 <%}%>
-                 </div>
-               <%})%>
-            </div>
-            <div class="col">
-              <div>
-                <h5 class="card-title"><%=movie.name%></h5>
-                <p ><b class="card-text">rating:</b><%=movie.rating%></p> 
-            </div>
-            </div>
-            <div class="col">
-              <div >
-                <a class="btn btn-info"href="/movies/<%=movie._id%>">INFO </a>
-              <form action="/movies/<%=movie._id%>/watchlist" method="POST">
-                <button class="btn btn-warning mb-3">watchlist</button>
-              </form>
-              </div>
-            </div>
-          </div>
-        </div>
-        <%}%> 
-      </div>
-      
-      <script>
-        const form=document.forms.sort;
-        function handleSubmit(event){
-           event.preventDefault();
-            const formData=new FormData(event.target);
-            const asString=new URLSearchParams(formData).toString();
-            console.log(asString);
-          }
-          FormDataEvent.addEventListener("submit",handleSubmit)
-      </script>
-      
-      
-  
+  <div class="col-md-4">
+    <label class="form-label">Language</label>
+    <select name="language" class="form-select bg-dark text-light border-secondary">
+      <option value="none">-- Any Language --</option>
+      <% for (let l of languages) { %>
+        <% if (l !== 'none') { %><option value="<%= l %>"><%= l %></option><% } %>
+      <% } %>
+    </select>
+  </div>
+  <div class="col-md-4 d-flex align-items-end">
+    <button type="submit" class="btn btn-warning w-100"><i class="bi bi-search me-1"></i>Apply Filter</button>
+  </div>
+</form>
 
- 
+<% if (movies.length === 0) { %>
+  <p class="text-secondary">No movies match your filter.</p>
+<% } %>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <% for (let movie of movies) { %>
+    <div class="col">
+      <div class="card bg-secondary bg-opacity-10 border-secondary h-100">
+        <% if (movie.images && movie.images.length > 0) { %>
+          <img src="<%= movie.images[0].url %>" class="card-img-top" style="height:180px;object-fit:cover" alt="<%= movie.name %>">
+        <% } %>
+        <div class="card-body">
+          <h6 class="text-warning"><%= movie.name %></h6>
+          <p class="text-secondary small mb-1"><%= movie.language %> | <%= movie.genre %></p>
+          <% if (movie.rating) { %><p class="small"><i class="bi bi-star-fill text-warning me-1"></i><%= movie.rating %></p><% } %>
+        </div>
+        <div class="card-footer bg-transparent border-secondary d-flex gap-2">
+          <a href="/movies/<%= movie._id %>" class="btn btn-sm btn-warning flex-grow-1">Info</a>
+          <% if (currentuser) { %>
+            <form action="/movies/<%= movie._id %>/watchlist" method="POST">
+              <button class="btn btn-sm btn-outline-warning"><i class="bi bi-bookmark-plus"></i></button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>

@@ -1,41 +1,35 @@
+<% layout("./layouts/boilerplate") %>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="text-warning mb-0"><i class="bi bi-bookmark-heart me-2"></i>My Watchlist</h3>
+  <a href="/account" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+</div>
 
+<% if (user.watchlists.length === 0) { %>
+  <div class="text-center text-secondary py-5">
+    <i class="bi bi-bookmark fs-1 d-block mb-2"></i>
+    <p>Your watchlist is empty. <a href="/movies" class="text-warning">Browse movies</a> to add some.</p>
+  </div>
+<% } %>
 
-<%layout("./layouts/boilerplate")%>
-<%-include("../styles/flash.ejs")%>
-<link rel="stylesheet" href="/stylesheets/movieshow.css">
-<!-- <link rel="stylesheet" href="/stylesheets/info.css"> -->
-<h1>watchlist</h1>
-
-
-<div class="container">
-    <% for(let watchlist of user.watchlists){%>
-    <div class="card">
-      <div class="row">
-        <div class="col">
-          <%watchlist.images.forEach((image,i)=>{%>
-            <div class="col <%=i===0?"active":""%>">
-              <%if(i==0){%>
-               <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="width:8em;height:8em">
-             <%}%>
-             </div>
-           <%})%>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <% for (let movie of user.watchlists) { %>
+    <div class="col">
+      <div class="card bg-secondary bg-opacity-10 border-secondary h-100">
+        <% if (movie.images && movie.images.length > 0) { %>
+          <img src="<%= movie.images[0].url %>" class="card-img-top" style="height:160px;object-fit:cover" alt="<%= movie.name %>">
+        <% } %>
+        <div class="card-body">
+          <h6 class="text-warning"><%= movie.name %></h6>
+          <p class="text-secondary small mb-0"><%= movie.language %> | <%= movie.genre %></p>
+          <% if (movie.rating) { %><p class="small mb-0"><i class="bi bi-star-fill text-warning me-1"></i><%= movie.rating %></p><% } %>
         </div>
-        <div class="col">
-          <div>
-            <h5 class="namerating card-text"><%=watchlist.name%></h5>
-            <p ><b class="card-text">rating:</b><%=watchlist.rating%></p> 
-        </div>
-        </div>
-        <div class="delete col">
-            <form action="/account/watchlist/<%=watchlist._id%>?_method=DELETE" method="POST">
-                <button class="btn btn-danger">delete</button>
-            </form>
+        <div class="card-footer bg-transparent border-secondary d-flex gap-2">
+          <a href="/movies/<%= movie._id %>" class="btn btn-sm btn-warning flex-grow-1">Info</a>
+          <form action="/account/watchlist/<%= movie._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
         </div>
       </div>
     </div>
-    <%}%> 
-    <a href="/account" class="btn btn-secondary">back</a>
-
-  </div>
-  
-
+  <% } %>
+</div>

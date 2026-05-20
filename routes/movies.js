@@ -1,109 +1,61 @@
-const express=require("express")
-const router=express.Router({mergeParams:true});
-const User=require("../models/users")
-const expresserror=require("../utils/expresserror");
-const catchasync=require("../utils/catchasync")
-const methodOverride=require("method-override");
-const Comment=require("../models/comments");
-const Movie=require("../models/movies");
-const Review=require("../models/reviews");
-const isloggedin=require("../middleware");
-const comments = require("../models/comments");
-const movies=require("../controllers/movies")
-const multer=require("multer");
-const storage=require("../cloudinary/index");
-const upload=multer(storage);
+const express = require("express");
+const router = express.Router({ mergeParams: true });
+const multer = require("multer");
+const { storage } = require("../cloudinary/index");
+const upload = multer({ storage });
+const catchasync = require("../utils/catchasync");
+const isloggedin = require("../middleware");
+const Movie = require("../models/movies");
+const Review = require("../models/reviews");
+const movies = require("../controllers/movies");
 
- 
-const requirelogin=(req,res,next)=>{
-    if(!req.session.user_id){
-        res.redirect("/login")
-    }
-    next();
-}
+const languages = ["none", "telugu", "tamil", "english", "hindi"];
+const genres = ["none", "love", "suspence", "comedy", "horror", "action"];
 
+// ── List & Search ─────────────────────────────────────────────────────────────
+router.get("/", catchasync(movies.showmovies));
+router.get("/search", catchasync(movies.moviesearch));
 
+// ── Filter ────────────────────────────────────────────────────────────────────
+router.get("/filter", catchasync(async (req, res) => {
+  const query = {};
+  if (req.query.genre && req.query.genre !== "none") query.genre = req.query.genre;
+  if (req.query.language && req.query.language !== "none") query.language = req.query.language;
+  const movieList = await Movie.find(query);
+  res.render("movies/filter.ejs", { movies: movieList, languages, genres });
+}));
 
-const languages=["none","telugu","tamil","english","hindi"];
-const genres=["none","love","suspence","comedy","horror","action"];
+// ── New / Create ──────────────────────────────────────────────────────────────
+router.get("/new", isloggedin, catchasync(movies.newmovie));
+router.post("/", isloggedin, upload.array("images"), catchasync(movies.movieadd));
 
+// ── Show / Edit / Update / Delete ─────────────────────────────────────────────
+router.get("/:id", catchasync(movies.movieselected));
+router.get("/:id/edit", isloggedin, catchasync(movies.movieedit));
+router.put("/:id", isloggedin, upload.array("images"), catchasync(movies.movieupdate));
+router.delete("/:id", isloggedin, catchasync(movies.deletemovie));
 
+// ── Watchlist ─────────────────────────────────────────────────────────────────
+router.post("/:id/watchlist", isloggedin, catchasync(movies.movieaddtowatchlist));
 
+// ── Comments ──────────────────────────────────────────────────────────────────
+router.post("/:id/comments", isloggedin, catchasync(movies.addcomments));
+router.delete("/:id/comments/:commentid", isloggedin, catchasync(movies.deletecomment));
 
-router.get("/",catchasync(movies.showmovies))
+// ── Reviews ───────────────────────────────────────────────────────────────────
+router.get("/:id/addreview", isloggedin, catchasync(async (req, res) => {
+  const movie = await Movie.findById(req.params.id);
+  res.render("reviews/new.ejs", { movie });
+}));
 
+router.post("/:id/reviews", isloggedin, catchasync(async (req, res) => {
+  const movie = await Movie.findById(req.params.id);
+  const review = new Review({ review: req.body.review, movies: movie._id, users: req.user._id });
+  movie.reviews.push(req.body.review);
+  await review.save();
+  await movie.save();
+  req.flash("success", "Review posted");
+  res.redirect(`/movies/${movie._id}`);
+}));
 
-
-router.delete("/:id/comments/:commentid",isloggedin,catchasync(movies.deletecomment))
-router.delete("/:id",catchasync(movies.deletemovie))
-
-
-
-router.get("/filter",async(req,res)=>{
-    if(req.query){
-        const movies=await Movie.find(req.query);
-        res.render("movies/filter.ejs",{movies,languages,genres})
-    }else{
-        const movies=await Movie.find({})
-    res.render("movies/filter.ejs",{movies,languages,genres})
-    }
-})
-
-router.get("/search",catchasync(movies.moviesearch))
-
-router.get("/new",isloggedin,catchasync(movies.newmovie))
-
-router.get("/:id",catchasync(movies.movieselected))
-router.get("/:id/edit",isloggedin,catchasync(movies.movieedit))
-
-router.get("/:id/addreview",catchasync(async(req,res)=>{
-    const {id}=req.params;
-    const movie=await Movie.findById(id);
-
-    res.render("reviews/new.ejs",{movie})
-}))
-router.post("/:id/watchlist",isloggedin,catchasync(movies.movieaddtowatchlist))
-
- router.post("/",isloggedin,upload.array("images"),catchasync(movies.movieadd))
-// router.post("/",upload.array("image"),(req,res)=>{
-//     console.log(req.body,req.files)
-//     res.send("worked")
-// })
-
-
-router.post("/:id/comments",isloggedin,catchasync(movies.addcomments))
-
-  
-
-router.post("/:id/reviews",catchasync(async(req,res)=>{
-    const{id}=req.params;
-    const movie=await Movie.findById(id)
-    const data=req.body
-    console.log(data)
-    const review=new Review(data)
-    // const review=new Review(req.body.review);
-    // console.log(review)
-    
-    movie.reviews.push(data.review);
-     await review.save();
-    await movie.save();
-    req.flash("success","posted a comment")
-    res.redirect(`/movies/${movie._id}`)
-}))
-
-
-  
-router.post("/sortbylanguage",async(req,res)=>{
-   
-    const movies=await Movie.find(req.body)
-    console.log(movies)
-    
- 
- })
-
- 
-
-
-router.put("/:id",isloggedin,upload.array("images"),catchasync(movies.movieupdate))
-
-module.exports=router
+module.exports = router;

@@ -1,21 +1,131 @@
-<%layout("./layouts/boilerplate")%>
-<link rel="stylesheet" href="/stylesheets/signin.css">
+<% layout("./layouts/boilerplate") %>
+  <main
+    class="min-vh-100 p-0 m-0 w-100 overflow-hidden d-flex align-items-center justify-content-center position-relative">
 
-
-<svg class="blob" id="visual" viewBox="0 0 900 600" width="900" height="600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><g transform="translate(424.1970790198573 292.17104505435265)"><path d="M53.8 -65.8C75.8 -58 104 -50.5 119.8 -31.8C135.7 -13.2 139.2 16.6 128.3 39.1C117.4 61.6 92.2 76.9 68.4 84.7C44.7 92.5 22.3 92.7 -2 95.4C-26.3 98.1 -52.5 103.3 -66.9 92.5C-81.4 81.6 -84 54.9 -82.7 33C-81.5 11 -76.4 -6.1 -70.9 -23C-65.4 -40 -59.4 -56.8 -47.5 -67.9C-35.7 -79.1 -17.8 -84.5 -1 -83.2C15.9 -81.8 31.7 -73.7 53.8 -65.8" fill="#36515c"></path></g></svg>
-<div class="container-mt-5">
-    <div class="login-form offset-3">
-        <h1>sign up</h1>
-        <form action="/signup" method="POST"> 
-          <input type="text"name="username" placeholder="username" />
-          <input type="text" name="email" placeholder="email" />
-          <input type="password" name="password"placeholder="Must be at least 8 characters" />
-          <button type="submit">signup</button>
-          <div class="forgot-signup">
-            <a href="/">home</a>
-            <a href="/login" class="login">login</a>
-          </div>
-        </form>
+    <!-- Cinematic Background -->
+    <div class="position-absolute w-100 h-100 top-0 start-0"
+      style="background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%); z-index: 0;"></div>
+    <div class="position-absolute w-100 h-100 top-0 start-0"
+      style="background: radial-gradient(circle at 50% 50%, rgba(108, 99, 255, 0.1) 0%, transparent 60%); z-index: 0; animation: pulseGlow 8s infinite alternate-reverse;">
     </div>
-        
-</div>
+
+    <div class="container position-relative gs-reveal" style="z-index: 1;">
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-5 col-lg-4">
+          <div class="card glass-panel auth-card border-0">
+            <div class="card-body p-5">
+              <div class="text-center mb-4">
+                <i class="bi bi-person-plus-fill"
+                  style="font-size: 3rem; color: var(--accent-secondary); text-shadow: 0 0 15px var(--accent-glow-secondary);"></i>
+                <h3 class="cinematic-heading text-white mt-2 mb-0" style="font-size: 2rem; letter-spacing: 1.5px;">Join
+                  Moviez</h3>
+                <p class="text-secondary small mt-1">Start tracking your cinematic journey</p>
+              </div>
+
+              <form action="/signup" method="POST">
+                <div class="form-floating mb-3">
+                  <input type="text" name="username"
+                    class="form-control bg-dark border-secondary text-white shadow-none focus-glow-secondary"
+                    id="usernameInput" placeholder="Username" required>
+                  <label for="usernameInput" class="text-secondary">Username</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input type="email" name="email"
+                    class="form-control bg-dark border-secondary text-white shadow-none focus-glow-secondary"
+                    id="emailInput" placeholder="Email (optional)">
+                  <label for="emailInput" class="text-secondary">Email Address</label>
+                </div>
+
+                <div class="form-floating mb-4">
+                  <input type="password" name="password"
+                    class="form-control bg-dark border-secondary text-white shadow-none focus-glow-secondary"
+                    id="passwordInput" placeholder="Password" required>
+                  <label for="passwordInput" class="text-secondary">Password (Min 8 chars)</label>
+                </div>
+
+                <button type="submit" class="btn-cinematic w-100 py-3"
+                  style="font-size: 1.1rem; background: var(--accent-secondary);">
+                  Create Account <i class="bi bi-rocket-takeoff ms-1"></i>
+                </button>
+              </form>
+
+              <div class="mt-4 text-center">
+                <p class="text-secondary small mb-0">Already a member?
+                  <a href="/login" class="text-white fw-bold text-decoration-none"
+                    style="transition: color 0.3s; color: var(--accent-secondary) !important;">Sign in</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .auth-card {
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        animation: floatCard 6s ease-in-out infinite;
+      }
+
+      .focus-glow-secondary:focus {
+        border-color: var(--accent-secondary) !important;
+        box-shadow: 0 0 0 0.25rem rgba(108, 99, 255, 0.25) !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+      }
+
+      .btn-cinematic:hover {
+        background: #7a72ff !important;
+        box-shadow: 0 4px 15px var(--accent-glow-secondary);
+      }
+
+      @keyframes floatCard {
+        0% {
+          transform: translateY(0px);
+        }
+
+        50% {
+          transform: translateY(-10px);
+        }
+
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes pulseGlow {
+        0% {
+          opacity: 0.5;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Form floating dark mode fix */
+      .form-floating>.form-control:focus~label,
+      .form-floating>.form-control:not(:placeholder-shown)~label {
+        color: var(--accent-secondary) !important;
+        opacity: 0.9;
+        transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+        background-color: transparent !important;
+      }
+
+      .form-floating>.form-control:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px #212529 inset !important;
+        -webkit-text-fill-color: white !important;
+      }
+    </style>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        gsap.fromTo(".gs-reveal",
+          { y: 30, opacity: 0, scale: 0.95 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.2)" }
+        );
+      });
+    </script>
+
+    <main class="min-vh-100">
+      <div class="container mt-4 mb-5" style="display:none;">

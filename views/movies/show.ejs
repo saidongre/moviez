@@ -1,137 +1,202 @@
+<% layout("./layouts/boilerplate") %>
 
-<%layout("./layouts/boilerplate")%>
-<link rel="stylesheet" href="/stylesheets/movieshow.css">
-<link rel="stylesheet" href="/stylesheets/displaymovies.css">
-<link rel="stylesheet" href="/stylesheets/revealingeffect.css">
-
-<!-- Navbar -->
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">Moviez</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/movies">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/movies/new">add</a>
-        </li>
-        <%if(currentuser){%>  
-        <li class="nav-item">
-          <a class="nav-link" href="/account">Account</a>
-        </li>
-        <%}%>
-        
-        
-      </ul>
-         <div class="navbar-nav ml-auto">
-          <%if(!currentuser){%>
-            <li class="nav-item">
-              <a class="nav-link " href="/login">login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/signup">signup</a>
-            </li>
-          <%}else{%>
-            <li class="nav-item">
-              <a class="nav-link" href="/logout">logout</a>
-            </li>
-            <%}%>
-         </div>
-
-      <form class="d-flex" action="/movies/search" method="GET">
-        <input class="form-control me-2" type="search" name="dsearch"placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-5 mt-4 gs-reveal">
+    <h2 class="cinematic-heading text-white m-0" style="font-size: 2.5rem; letter-spacing: 2px;">
+      <i class="bi bi-film me-2" style="color: var(--accent-primary);"></i> Trending <span
+        style="color: var(--text-secondary);">Movies</span>
+    </h2>
+    <a href="/movies/filter" class="btn-cinematic-outline" style="padding: 8px 20px;">
+      <i class="bi bi-funnel me-1"></i> Discover Filter
+    </a>
   </div>
-</nav>
 
-<!-- flash -->
-<%-include("../styles/flash.ejs")%>
+  <!-- Empty State -->
+  <% if (movies.length===0) { %>
+    <div class="text-center py-5 glass-panel gs-reveal">
+      <i class="bi bi-camera-reels"
+        style="font-size: 4rem; color: var(--text-muted); display: block; margin-bottom: 20px;"></i>
+      <h3 class="cinematic-heading text-white">No Movies Found</h3>
+      <p class="text-secondary mb-4">It's quiet in here... too quiet.</p>
+      <% if (currentuser) { %>
+        <a href="/movies/new" class="btn-cinematic">
+          <i class="bi bi-plus-circle me-2"></i> Add First Movie
+        </a>
+        <% } %>
+    </div>
+    <% } %>
 
+      <!-- Responsive Movie Grid -->
+      <div class="movie-grid">
+        <% for (let [index, movie] of movies.entries()) { %>
+          <div class="movie-card-wrapper" data-aos="fade-up" data-aos-delay="<%= (index % 5) * 100 %>">
+            <div class="movie-card">
 
-<!-- headings -->
-    <h1>MOVIES</h1>
-    <a class="btn btn-dark" href="/movies/filter">add filter</a>
-    
- <!-- displaymovies -->
-        <div class="container-md-8">
-          <% for(let movie of movies){%>
-          <div class="card">
-            <div class="row">
-              <div class="col">
-                <%movie.images.forEach((image,i)=>{%>
-                  <div class="col <%=i===0?"active":""%>">
-                    <%if(i==0){%>
-                     <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="height:10em;width:10em" >
-                   <%}%>
-                   </div>
-                 <%})%>
-              </div>
-              <div class="namerating col-md-3">
-                <div>
-                  <h5 class="card-title"><%=movie.name%></h5>
-                  <p ><b class="card-text">rating:</b><%=movie.rating%></p> 
-              </div>
-              </div>
-              <div class="infowatchlist col">
-                <div >
-                  <a class="btn btn-outline-info"href="/movies/<%=movie._id%>">INFO </a>
-                <form action="/movies/<%=movie._id%>/watchlist" method="POST">
-                  <button class="btn btn-outline-warning mb-3">watchlist</button>
-                </form>
-                </div>
-              </div>
+              <!-- Poster Background -->
+              <% if (movie.images && movie.images.length> 0) { %>
+                <div class="movie-poster" style="background-image: url('<%= movie.images[0].url %>');"></div>
+                <% } else { %>
+                  <div class="movie-poster no-poster d-flex align-items-center justify-content-center">
+                    <i class="bi bi-image" style="font-size: 3rem; color: var(--text-muted);"></i>
+                  </div>
+                  <% } %>
+
+                    <!-- Hover Overlay -->
+                    <div class="movie-overlay d-flex flex-column justify-content-end p-3">
+                      <div class="movie-info-animate">
+                        <h4 class="movie-title text-white fw-bold mb-1 text-truncate">
+                          <%= movie.name %>
+                        </h4>
+
+                        <div class="d-flex gap-2 flex-wrap mb-2">
+                          <span class="tag-pill">
+                            <%= movie.genre %>
+                          </span>
+                          <% if(movie.year) { %><span class="tag-pill bg-dark">
+                              <%= movie.year %>
+                            </span>
+                            <% } %>
+                              <% if(movie.rating) { %>
+                                <span class="tag-pill border border-warning text-warning bg-transparent">
+                                  <i class="bi bi-star-fill me-1"></i>
+                                  <%= movie.rating %>
+                                </span>
+                                <% } %>
+                        </div>
+
+                        <p class="movie-desc small text-light text-truncate" style="opacity: 0.8; margin-bottom: 12px;">
+                          Language: <%= movie.language.charAt(0).toUpperCase() + movie.language.slice(1) %>
+                        </p>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2">
+                          <a href="/movies/<%= movie._id %>" class="btn btn-sm btn-cinematic flex-grow-1"
+                            style="padding: 6px 0;">
+                            <i class="bi bi-info-circle me-1"></i> Details
+                          </a>
+                          <% if (currentuser) { %>
+                            <form action="/movies/<%= movie._id %>/watchlist" method="POST" class="m-0">
+                              <button class="btn btn-sm btn-cinematic-outline px-2 h-100" style="padding: 6px;"
+                                title="Add to watchlist">
+                                <i class="bi bi-bookmark-plus text-white"></i>
+                              </button>
+                            </form>
+                            <% } %>
+                        </div>
+                      </div>
+                    </div>
+
             </div>
           </div>
-          
-          <%}%> 
-         
-            
-          </h1>
-          
-        
-        <script>
-          const form=document.forms.sort;
-          function handleSubmit(event){
-             event.preventDefault();
-              const formData=new FormData(event.target);
-              const asString=new URLSearchParams(formData).toString();
-              console.log(asString);
-            }
-            FormDataEvent.addEventListener("submit",handleSubmit)
+          <% } %>
+      </div>
 
+      <style>
+        /* Responsive Movie Grid: 5 cols desktop, 3 tablet, 2 mobile */
+        .movie-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 24px;
+        }
 
+        @media (max-width: 1200px) {
+          .movie-grid {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+          }
+        }
 
+        @media (max-width: 768px) {
+          .movie-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+          }
+        }
 
+        /* Cinematic Movie Card */
+        .movie-card-wrapper {
+          aspect-ratio: 2 / 3;
+          perspective: 1000px;
+        }
 
+        .movie-card {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          border-radius: var(--radius-lg);
+          overflow: hidden;
+          background: var(--bg-card);
+          transition: all var(--transition-normal);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+          cursor: pointer;
+        }
 
+        .movie-card:hover {
+          transform: scale(1.05) translateY(-5px);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px var(--accent-glow);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          z-index: 10;
+        }
 
+        /* Poster Image */
+        .movie-poster {
+          width: 100%;
+          height: 100%;
+          background-size: cover;
+          background-position: center;
+          transition: transform var(--transition-slow);
+        }
 
+        .no-poster {
+          background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-card) 100%);
+        }
 
-            (function() {
+        .movie-card:hover .movie-poster {
+          transform: scale(1.1);
+        }
 
-var quotes = $(".quotes");
-var quoteIndex = -1;
+        /* Hover Overlay */
+        .movie-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to bottom,
+              rgba(10, 10, 15, 0) 0%,
+              rgba(10, 10, 15, 0.4) 40%,
+              rgba(10, 10, 15, 0.9) 80%,
+              rgba(10, 10, 15, 1) 100%);
+          opacity: 0;
+          transition: opacity var(--transition-fast);
+        }
 
-function showNextQuote() {
-++quoteIndex;
-quotes.eq(quoteIndex % quotes.length)
-.fadeIn(2000)
-.delay(5000)
-.fadeOut(2000, showNextQuote);
-}
+        .movie-card:hover .movie-overlay {
+          opacity: 1;
+        }
 
-showNextQuote();
+        /* Slide up animation for content */
+        .movie-info-animate {
+          transform: translateY(20px);
+          transition: transform var(--transition-normal);
+        }
 
-})();
-        </script>
-        
-        
-    
+        .movie-card:hover .movie-info-animate {
+          transform: translateY(0);
+        }
 
-   
+        .movie-title {
+          font-family: var(--font-heading);
+          letter-spacing: 0.5px;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+      </style>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          // Reveal header
+          gsap.fromTo(".gs-reveal",
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
+          );
+        });
+      </script>

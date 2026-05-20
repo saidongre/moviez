@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>add review</title>
-</head>
-<body>
-    <h1>add new review</h1>
-    <form action="/movies/<%=movie.id%>" method="POST">
-        <label for="review">add review:</label>
-        <textarea name="review" rows="5" cols="60" id="review"></textarea>
-        <button>submit</button>
+<% layout("./layouts/boilerplate") %>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h3 class="text-warning mb-4"><i class="bi bi-pencil-square me-2"></i>Write a Review</h3>
+    <h5 class="text-secondary mb-3"><%= movie.name %></h5>
+    <form action="/movies/<%= movie._id %>/reviews" method="POST">
+      <div class="mb-3">
+        <label class="form-label">Your Review</label>
+        <textarea name="review" class="form-control bg-dark text-light border-secondary" rows="5" placeholder="Share your thoughts..." required></textarea>
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-warning"><i class="bi bi-send me-1"></i>Submit Review</button>
+        <a href="/movies/<%= movie._id %>" class="btn btn-outline-secondary">Cancel</a>
+      </div>
     </form>
-</body>
-</html>
+  </div>
+</div>

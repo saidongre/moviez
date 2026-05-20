@@ -1,367 +1,322 @@
+<% layout("./layouts/boilerplate") %>
 
-<%layout("./layouts/boilerplate")%>
-<link rel="stylesheet" href="/stylesheets/info.css">
-<link rel="stylesheet" href="/stylesheets/usershow.css">
-<link rel="stylesheet" href="/stylesheets/moviecard.css">
-<link rel="stylesheet" href="/stylesheets/scrollarea.css">
-<link rel="stylesheet" href="/stylesheets/revealingeffect.css">
-<link rel="stylesheet" href="/stylesheets/check.css">
-<!-- <link rel="stylesheet" href="/stylesheets/movieshow.css"> -->
-<!-- <link rel="stylesheet" href="/stylesheets/avengerscard.css"> -->
-<!-- <link rel="stylesheet" href="/stylesheets/avengerscard.scss"> -->
-
-
-
-<nav class="navbar  sticky-top navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">Moviez</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/movies">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/movies/new">add</a>
-        </li>
-        <%if(currentuser){%>  
-        <li class="nav-item">
-          <a class="nav-link" href="/account">Account</a>
-        </li>
-        <%}%>
-        
-        
-      </ul>
-         <div class="navbar-nav ml-auto">
-          <%if(!currentuser){%>
-            <li class="nav-item">
-              <a class="nav-link " href="/login">login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/signup">signup</a>
-            </li>
-          <%}else{%>
-            <li class="nav-item">
-              <a class="nav-link" href="/logout">logout</a>
-            </li>
-            <%}%>
-         </div>
-
-    </div>
+  <!-- Full Bleed Cinematic Details Layout -->
   </div>
-</nav>
+  </main>
+  <main class="min-vh-100 p-0 m-0 w-100 overflow-hidden" style="background: var(--bg-primary);">
 
-
-
-<%-include("../styles/flash.ejs")%>
-
-<h1 class="block-effect" style="--td: 1.2s">
-  <div class="block-reveal" style="--bc: #f10c0c; --d: .1s" ><%=movie.name%></div>
-  <div class="block-reveal" style="--bc: #c5ed14; --d: .5s"><%=movie.year%></div>
-</h1>
-<a class="btn btn-outline-secondary btn-sm "href="/movies">back</a>
-<form action="/movies/<%=movie._id%>/watchlist" method="POST">
-  <button class="btn btn-outline-warning" type="button">watchlist</button>
-</form>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<div class="container">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card"style="width:30em;">
-        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <%movie.images.forEach((image,i)=>{%>
-              <div class="carousel-item <%=i===0?"active":""%>">
-                <img src="<%=image.url%>" class="d-block w-100" alt="..."style="height:20em">
-              </div>
-            <%})%>
-            
-          </div>
-          <%if(movie.images.length>1){%>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          <%}%>
+    <!-- Backdrop Section -->
+    <div class="movie-backdrop position-relative" style="height: 70vh; min-height: 500px; width: 100%;">
+      <% if (movie.images && movie.images.length> 0) { %>
+        <!-- Use first image as backdrop -->
+        <div class="backdrop-img w-100 h-100"
+          style="background-image: url('<%= movie.images[0].url %>'); background-size: cover; background-position: center 20%; filter: brightness(0.7) blur(2px);">
         </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col">
-              <p><b>hero:</b><%=movie.hero%></p>
-              <p><b>heroine:</b><%=movie.heroine%></p>
-              <p><b>ott platform:</b><%=movie.ott%></p>
+        <% } else { %>
+          <div class="backdrop-img w-100 h-100"
+            style="background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-card) 100%);"></div>
+          <% } %>
+
+            <!-- Overlay Gradient to blend with content -->
+            <div class="backdrop-overlay position-absolute top-0 start-0 w-100 h-100"
+              style="background: linear-gradient(to top, var(--bg-primary) 0%, rgba(10,10,15,0.7) 40%, rgba(10,10,15,0.2) 100%);">
             </div>
-            <div class="col">
-              <h5 class="card-text">rating:<%=movie.rating%></h5>
-              <h5>language:<%=movie.language%></h5>
-              <h5>genre:<%=movie.genre%></h5>
+
+            <!-- Hero Content inside backdrop -->
+            <div class="container position-absolute bottom-0 start-50 translate-middle-x w-100 pb-5 gs-reveal">
+              <div class="row align-items-end">
+                <!-- Poster -->
+                <div class="col-md-3 d-none d-md-block">
+                  <div class="movie-poster-hero shadow-lg"
+                    style="border-radius: var(--radius-lg); overflow: hidden; border: 2px solid rgba(255,255,255,0.1); aspect-ratio: 2/3;">
+                    <% if (movie.images && movie.images.length> 0) { %>
+                      <img src="<%= movie.images[0].url %>" class="w-100 h-100" style="object-fit: cover;"
+                        alt="<%= movie.name %>">
+                      <% } else { %>
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-secondary">
+                          <i class="bi bi-image fs-1 text-muted"></i>
+                        </div>
+                        <% } %>
+                  </div>
+                </div>
+
+                <!-- Meta Information -->
+                <div class="col-md-9 text-light">
+                  <h1 class="cinematic-heading text-white fw-bold mb-2"
+                    style="font-size: 3.5rem; text-shadow: 0 4px 15px rgba(0,0,0,0.8);">
+                    <%= movie.name %>
+                  </h1>
+
+                  <div class="d-flex flex-wrap gap-3 align-items-center mb-4"
+                    style="font-family: var(--font-body); font-size: 1rem;">
+                    <% if (movie.rating) { %>
+                      <span class="d-flex align-items-center text-warning fw-bold"
+                        style="background: rgba(0,0,0,0.5); padding: 4px 12px; border-radius: 20px;">
+                        <i class="bi bi-star-fill me-2"></i>
+                        <%= movie.rating %> / 10
+                      </span>
+                      <% } %>
+                        <span class="text-white-50"><i class="bi bi-calendar me-1"></i>
+                          <%= movie.year || 'Unknown Year' %>
+                        </span>
+                        <span class="tag-pill bg-dark border border-secondary">
+                          <%= movie.language.toUpperCase() %>
+                        </span>
+                        <span class="tag-pill" style="background: var(--accent-primary);">
+                          <%= movie.genre %>
+                        </span>
+                        <span class="text-white-50"><i class="bi bi-display me-1"></i>
+                          <%= movie.ott || 'Theaters' %>
+                        </span>
+                  </div>
+
+                  <!-- Action Buttons -->
+                  <div class="d-flex gap-3 flex-wrap">
+                    <% if (currentuser) { %>
+                      <form action="/movies/<%= movie._id %>/watchlist" method="POST" class="m-0">
+                        <button class="btn-cinematic px-4 py-2" title="Add to watchlist">
+                          <i class="bi bi-bookmark-plus me-2 fs-5"></i> Watchlist
+                        </button>
+                      </form>
+                      <a href="/movies/<%= movie._id %>/addreview" class="btn-cinematic-outline px-4 py-2">
+                        <i class="bi bi-pencil-square me-2 fs-5"></i> Review
+                      </a>
+                      <% if(currentuser.role==='admin' || currentuser._id.equals(movie.author)) { %>
+                        <!-- Assuming some authorization for edit/delete; showing them if user exists for now -->
+                        <a href="/movies/<%= movie._id %>/edit" class="btn btn-outline-light px-3 py-2"><i
+                            class="bi bi-pencil"></i></a>
+                        <form action="/movies/<%= movie._id %>?_method=DELETE" method="POST" class="m-0"
+                          onsubmit="return confirm('Delete this movie?')">
+                          <button class="btn btn-outline-danger px-3 py-2"><i class="bi bi-trash"></i></button>
+                        </form>
+                        <% } %>
+                          <% } else { %>
+                            <a href="/login" class="btn-cinematic px-4 py-2"><i
+                                class="bi bi-box-arrow-in-right me-2 fs-5"></i> Login to Add to Watchlist</a>
+                            <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+    </div>
+
+    <!-- Details & Comments Section -->
+    <div class="container py-5">
+      <div class="row g-5">
+
+        <!-- Left Column: Storyline & Cast -->
+        <div class="col-lg-7" data-aos="fade-up">
+          <div class="glass-panel p-4 mb-4">
+            <h3 class="cinematic-heading text-white mb-3" style="font-size: 1.8rem;">Storyline</h3>
+            <p class="text-secondary" style="font-size: 1.1rem; line-height: 1.8;">
+              <%= movie.storyline ? movie.storyline : "No storyline provided for this movie yet." %>
+            </p>
+          </div>
+
+          <div class="glass-panel p-4">
+            <h3 class="cinematic-heading text-white mb-3" style="font-size: 1.8rem;">Cast & Crew</h3>
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <div class="d-flex align-items-center p-3 rounded"
+                  style="background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent-primary);">
+                  <i class="bi bi-person-video me-3 fs-3 text-muted"></i>
+                  <div>
+                    <p class="mb-0 text-white-50 small text-uppercase">Lead Actor</p>
+                    <h5 class="mb-0 text-white">
+                      <%= movie.hero || 'N/A' %>
+                    </h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="d-flex align-items-center p-3 rounded"
+                  style="background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent-secondary);">
+                  <i class="bi bi-person-video me-3 fs-3 text-muted"></i>
+                  <div>
+                    <p class="mb-0 text-white-50 small text-uppercase">Lead Actress</p>
+                    <h5 class="mb-0 text-white">
+                      <%= movie.heroine || 'N/A' %>
+                    </h5>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-  
-    </div>
-    
-    <div class="col-md-6">
-      <div class="comments">
-        <h3 class="commentheading">comments:</h3>
-      <div class="ymacha overflow-scroll-y">
-        <% for(let comment of movie.comments){%>
-          <div class="card" style="width: 18rem;height:10em">
-              <!-- <img src="..." class="card-img-top" alt="..."> -->
-              <div class="card-body">
-                <h5 class="card-title"><%=comment.name%></h5>
-                <p class="card-text"><%=comment.comment%></p>
-                <%if(currentuser){%>
-                  <%if(currentuser.username==comment.name){%>
-                    <form action="/movies/<%=movie._id%>/comments/<%=comment.id%>?_method=DELETE" method="POST">
-                      <button class="btn btn-sm btn-danger">delete</button>
-                  </form>
-                  <%}%>
-                <%}%>
-                
-              </div>
+
+        <!-- Right Column: Comments & Recommendations -->
+        <div class="col-lg-5" data-aos="fade-up" data-aos-delay="200">
+
+          <!-- Comments Section -->
+          <div class="glass-panel p-4 mb-4">
+            <h4 class="text-white mb-4 d-flex align-items-center" style="font-family: var(--font-heading);">
+              <i class="bi bi-chat-left-text me-2 text-warning"></i> Fan Discussion <span
+                class="badge bg-secondary ms-2 rounded-pill">
+                <%= movie.comments.length %>
+              </span>
+            </h4>
+
+            <div class="comments-container mb-4 pe-2" style="max-height: 400px; overflow-y: auto;">
+              <% if (movie.comments.length===0) { %>
+                <div class="text-center py-4">
+                  <i class="bi bi-chat-square-dots fs-1 text-muted mb-2 d-block"></i>
+                  <p class="text-secondary mb-0">No comments yet. Be the first to discuss!</p>
+                </div>
+                <% } %>
+
+                  <% for (let comment of movie.comments) { %>
+                    <div class="comment-card p-3 mb-3 rounded"
+                      style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);">
+                      <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex gap-2 align-items-center mb-2">
+                          <div
+                            class="avatar-circle bg-secondary text-white d-flex align-items-center justify-content-center rounded-circle"
+                            style="width: 32px; height: 32px; font-weight: bold;">
+                            <%= comment.name.charAt(0).toUpperCase() %>
+                          </div>
+                          <strong class="text-warning">
+                            <%= comment.name %>
+                          </strong>
+                        </div>
+
+                        <% if (currentuser && currentuser.username===comment.name) { %>
+                          <form action="/movies/<%= movie._id %>/comments/<%= comment._id %>?_method=DELETE"
+                            method="POST" class="m-0">
+                            <button class="btn btn-sm btn-link text-danger p-0" title="Delete comment"><i
+                                class="bi bi-trash"></i></button>
+                          </form>
+                          <% } %>
+                      </div>
+                      <p class="mb-0 text-light ms-5" style="font-size: 0.95rem; opacity: 0.9;">
+                        <%= comment.comment %>
+                      </p>
+                    </div>
+                    <% } %>
             </div>
-      <%}%>
-      </div>
-    </div>
-      
-  </div>
-    </div>
-  </div>
-</div><br><br>
-<div class="examples">
-  <div class="btn_wrap">
-    <span class="helpers">options</span>
-    <div class="options">
-      <a href="/movies/<%=movie._id%>/edit" class="btn btn-primary btn-sm">edit</a>
-      <form action="/movies/<%=movie._id%>?_method=DELETE" method="POST">
-        <button class="btn btn-danger btn-sm">delete</button>
-      </form>
-      
-      
-    </div>
-  </div>
-  </div>
-</div>
 
-
-<div class="circle-wrap">
-  <div class="circle">
-    
-    <div class="mask full">
-      <div class="fill"></div>
-    </div>
-   
-    <div class="mask half">
-      <div class="fill"></div>
-    </div>
-    
-    <div class="inside-circle">
-      <%=movie.rating*10%>
-    </div>
-    
-  </div>
-</div>
-
-<div class="circlePercent">
-  <div class="counter" data-percent="<%=movie.rating*10%>"></div>
-  <div class="progress"></div>
-  <div class="progressEnd"></div>
-</div>
-
-
-<br><br><br><br>
-
-<div class="card">
-  <div class="container">
-    <div class="row">
-      <h2>recommended movies</h2>
-     <div class="col">
-      <div class="yrecommendedmovies" >
-        <div class="container">
-          
-          <%if(results){%>
-            <% for(let result of results){%>
-              <%if(movie.rating<=result.rating){%>
-         <div class="card" style="height:10em">
-          <div class="row">
-            <div class="col">
-              
-                    <%result.images.forEach((image,i)=>{%>
-                      <div class="col <%=i===0?"active":""%>">
-                        <%if(i==0){%>
-                         <img src="<%=image.url%>" class="img-thumbnail" alt="..." style="height:10em;width:10em" >
-                       <%}%>
-                       </div>
-                     <%})%>
-            </div>
-            <div class="col">
-              <div class="card-body">
-                <p><b></b><%=result.name%></p>
-                <p><b>rating:</b><%=result.rating%></p>
-              </div>
-              
-            </div>
-            <div class="infowatchlist col">
-              <div >
-                <a class="btn btn-outline-info"href="/movies/<%=result._id%>">INFO </a>
-              <form action="/movies/<%=result._id%>/watchlist" method="POST">
-                <button class="btn btn-outline-warning mb-3">watchlist</button>
+            <% if (currentuser) { %>
+              <form action="/movies/<%= movie._id %>/comments" method="POST" class="mt-3 p-3 rounded"
+                style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);">
+                <input type="hidden" name="comment[name]" value="<%= currentuser.username %>">
+                <input type="hidden" name="comment[moviename]" value="<%= movie.name %>">
+                <div class="mb-3">
+                  <label class="form-label text-white-50 small mb-1">Join the conversation</label>
+                  <textarea class="form-control bg-dark text-light border-secondary shadow-none focus-glow"
+                    name="comment[comment]" rows="2" placeholder="What did you think of the movie?" required></textarea>
+                </div>
+                <div class="text-end">
+                  <button class="btn btn-cinematic btn-sm px-4"><i class="bi bi-send me-1"></i> Post</button>
+                </div>
               </form>
-              </div>
-            </div>
-         </div>
+              <% } else { %>
+                <div class="text-center p-3 rounded"
+                  style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.2);">
+                  <p class="text-secondary mb-2 small">Want to join the discussion?</p>
+                  <a href="/login" class="btn btn-sm btn-outline-light">Login to Comment</a>
+                </div>
+                <% } %>
           </div>
-          <%}%>
-           
-          <%}%>
-        <%}%>
-                 
-        </div>
-       
-        
-      </div>
-      </div>
-      <div class="col">
-        <h2>comment</h2>
-        <div class="col-md-12">
-          <%if(currentuser){%>
-            <form action="/movies/<%=movie.id%>/comments" method="POST">
-              <label class="form-label"for="name">name:</label>
-              <input class="form-control"name="comment[name]"  id="name"value="<%=currentuser.username%>">
-              <label class="form-label"for="moviename">moviename:</label>
-              <input class="form-control"name="comment[moviename]"  id="moviename"value="<%=movie.name%>">
-              <label class="form-label"for="comment">add comment:</label>
-              <textarea class="form-control"name="comment[comment]" rows="5" cols="60" id="comment"></textarea>
-              <button class="btn btn-outline-primary">submit</button>
-          </form>
-          <%}%>
-  
+
+          <!-- Recommended Movies -->
+          <% if (results && results.length> 0) { %>
+            <h4 class="text-white mb-3 mt-5" style="font-family: var(--font-heading);">
+              <i class="bi bi-collection-play me-2 text-primary"></i> Similar <span class="text-secondary">
+                <%= movie.genre %>
+              </span> Movies
+            </h4>
+            <div class="row row-cols-2 g-3">
+              <% for (let r of results.slice(0, 4)) { %>
+                <div class="col">
+                  <a href="/movies/<%= r._id %>" class="text-decoration-none">
+                    <div class="card bg-transparent border-0 h-100 movie-rec-card">
+                      <div class="rounded overflow-hidden mb-2 position-relative shadow text-center bg-secondary"
+                        style="aspect-ratio: 2/3;">
+                        <% if (r.images && r.images.length> 0) { %>
+                          <img src="<%= r.images[0].url %>" class="w-100 h-100 object-fit-cover" alt="<%= r.name %>">
+                          <% } else { %>
+                            <i
+                              class="bi bi-image fs-1 text-muted position-absolute top-50 start-50 translate-middle"></i>
+                            <% } %>
+                              <div
+                                class="rec-overlay position-absolute w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center"
+                                style="background: rgba(0,0,0,0.6); opacity: 0; transition: opacity 0.3s;">
+                                <i class="bi bi-play-circle fs-1 text-white"></i>
+                              </div>
+                      </div>
+                      <h6 class="text-white text-truncate mb-0 fs-6">
+                        <%= r.name %>
+                      </h6>
+                      <p class="text-warning small mb-0"><i class="bi bi-star-fill me-1"></i>
+                        <%= r.rating || 'N/A' %>
+                      </p>
+                    </div>
+                  </a>
+                </div>
+                <% } %>
+            </div>
+            <% } %>
+
         </div>
       </div>
     </div>
-    
-  </div>
-</div>
 
-<br><br>
-<div class="d-grid gap-2">
-  
-  <a class="btn btn-outline-primary" href="/account/watchlist"type="button">my watchlist</a>
-</div>
+    <style>
+      /* Custom Styles for Details Page */
+      .movie-poster-hero {
+        transform: translateY(20px);
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
 
+      .movie-poster-hero:hover {
+        transform: translateY(10px);
+      }
 
-<%if(currentuser){%>
-  <%-include("../styles/footer.ejs")%>
-<%}%>
+      .focus-glow:focus {
+        border-color: var(--accent-primary) !important;
+        box-shadow: 0 0 10px rgba(229, 9, 20, 0.2) !important;
+      }
 
+      /* Custom Scrollbar for comments */
+      .comments-container::-webkit-scrollbar {
+        width: 6px;
+      }
 
+      .comments-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+      }
 
+      .comments-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+      }
 
+      /* Recommended Movie Cards Hover */
+      .movie-rec-card img {
+        transition: transform 0.4s ease;
+      }
 
+      .movie-rec-card:hover img {
+        transform: scale(1.05);
+      }
 
-<a href="https://abubakersaeed.netlify.app/designs/d12-block-revealing-effect" class="abs-site-link" rel="nofollow noreferrer" target="_blank">abs/designs/d12-block-revealing-effect</a>
+      .movie-rec-card:hover .rec-overlay {
+        opacity: 1 !important;
+      }
 
+      .movie-rec-card:hover h6 {
+        color: var(--accent-primary) !important;
+      }
+    </style>
 
-<!-- delete -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        gsap.fromTo(".gs-reveal",
+          { y: 50, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.2 }
+        );
+      });
+    </script>
 
-<div id="ContainerHL">  
-  <div id="MainPoster">   
-    <%movie.images.forEach((image,i)=>{%>
-      <div  <%=i===0?"active":""%>>
-        <%if(i==0){%>
-         <img src="<%=image.url%>"  alt="..." height=280 >
-       <%}%>
-       </div>
-     <%})%>
-      <div id="Ratings">
-        <table>
-          <tr>
-            <td><b><span style="color:rgb(200,170,30);">IMDb:</span></b></td>
-            <td><b><%=movie.rating%></b><span style="color:rgb(70,70,70);"> / 10</span></td>
-          </tr>
-         
-        </table>
-
- </div>
- </div>
-
- <div id="TitleHL"><b><%=movie.name%></b></div> 
- <div id="UserRatingHL">
-   <div class="stars" id="s1">&#9733</div>
-   <div class="stars" id="s2">&#9733</div>
-   <div class="stars" id="s3">&#9733</div>
-   <div class="stars" id="s4">&#9733</div>
-   <div class="stars" id="s5">&#9733</div>
- </div>  
-</div>
-<div id="SelMovie">
- <div id="MovieInfoMain">
-   <div id="Title"><b> </b></div>    
-   <div id="UserRating"></div>   
-   <div id="DetailsTop"></div>
-   <div id="DetailsTopCover"></div>
-   <div id="DetailsBottom"></div>
-   <div id="DetailsBottomCover"></div>
-   <div id="Details">
-    <table>
-      <tr><td class="Key">Genre</td><td class="Value"><%=movie.genre%></td></tr>       
-      <tr><td class="Key">Released</td><td class="Value"><%=movie.year%></td></tr>
-      <tr><td class="Key">story</td><td class="Value"><%=movie.storyline%></td></tr>
-      <tr><td class="Key">hero</td><td class="Value"><%=movie.hero%></td></tr>
-      <tr><td class="Key">heroine</td><td class="Value"><%=movie.heroine%></td></tr>
-      <tr><td class="Key">ott</td><td class="Value"><%=movie.ott%></td></tr>
-      <tr><td class="Key">rating</td><td class="Value"><%=movie.rating%></td></tr>
-      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
-      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
-      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
-      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
-      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
-        <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
-      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
-      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
-      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
-      <tr><td class="Key">Director</td><td class="Value">Gérard Pirés</td></tr>
-     </table>
-   </div> 
- 
- </div>
-</div>  
-
-    <!-- card -->
-   
-
-<script>
-  function setProgress(elem, percent) {
-   
-  var
-    degrees = percent,
-    transform = /MSIE 9/.test(navigator.userAgent) ? 'msTransform' : 'transform';
-  elem.querySelector('.counter').setAttribute('data-percent', Math.round(percent));
-  elem.querySelector('.progressEnd').style[transform] = 'rotate(' + degrees + 'deg)';
-  elem.querySelector('.progress').style[transform] = 'rotate(' + degrees + 'deg)';
-  if(percent >= 50 && !/(^|\s)fiftyPlus(\s|$)/.test(elem.className))
-    elem.className += ' fiftyPlus';
-}
-
-(function() {
-  var
-    elem = document.querySelector('.circlePercent'),
-    percent = movie.rating*10;
-  (function animate() {
-    setProgress(elem, percent );
-    if(percent < 100)
-      setTimeout(animate, 15);
-  })();
-})();
-</script>
-
-   
-    
+    <main class="min-vh-100">
+      <div class="container mt-4 mb-5">

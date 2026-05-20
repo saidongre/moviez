@@ -1,114 +1,72 @@
-
-
-<%layout("./layouts/boilerplate")%>
-
-  <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Moviez</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/movies">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/account">Account</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"type="button" class="btn btn-outline-success" href="/logout">logout</a>
-          </li>
-         
-        </ul>
-       
+<% layout("./layouts/boilerplate") %>
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <h3 class="text-warning mb-4"><i class="bi bi-plus-circle me-2"></i>Add New Movie</h3>
+    <form action="/movies" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label class="form-label">Movie Name *</label>
+        <input type="text" name="movie[name]" class="form-control bg-dark text-light border-secondary" required>
+        <div class="invalid-feedback">Name is required.</div>
       </div>
-    </div>
-  </nav><br>
-
-
-  
-
-
-    <h1>add new movie</h1>
-    <form action="/movies"method="POST"novalidate class="validated-form" enctype="multipart/form-data">
-     <div>
-        <div>
-            <label for="name"class="form-label">name:</label>
-            <input type="text"class="form-control" name="movie[name]"placeholder="name"id="name"required>
-            <div class="valid-feedback">proceed</div>
-         </div>
-         <div>
-            <label for="language"class="form-label">language:</label>
-            <select name="movie[language]" id="language">
-                <%for(let language of languages){%>
-                    <option value="<%=language%>"><%=language%></option>
-                <%}%>
-            </select>
-         </div>
-         <div>
-            <label for="genre"class="form-label">genre:</label>
-            <select name="movie[genre]" id="genre">
-                <%for(let genre of genres){%>
-                    <option value="<%=genre%>"><%=genre%></option>
-                <%}%>
-            </select>
-         </div>
-         <div>
-            <label for="rating"class="form-label">rating:</label>
-            <input type="text"class="form-control" name="movie[rating]"placeholder="rating"id="rating">
-         </div>
-         <div>
-            <label for="hero"class="form-label">hero:</label>
-            <input type="text"class="form-control" name="movie[hero]"placeholder="hero"id="hero">
-         </div>
-         <div>
-            <label for="heroine"class="form-label">heroine:</label>
-            <input type="text" class="form-control"name="movie[heroine]"placeholder="heroine"id="heroine">
-         </div>
-         <div>
-            <label for="storyline"class="form-label">story line:</label>
-            <textarea name="movie[storyline]" class="form-control"cols="30"rows="10"></textarea>
-         </div>
-         <div>
-            <label for="year"class="form-label">year:</label>
-            <input type="text"class="form-control" name="movie[year]"placeholder="year"id="year">
-         </div>
-         <div>
-            <label for="ott"class="form-label">ott:</label>
-            <input type="text"class="form-control" name="movie[ott]"placeholder="ott"id="ott">
-         </div>
-         <input type="file" name="images" id=""multiple>
-         <!-- <div>
-            <label for="image"class="form-label">image:</label>
-            <input type="text"class="form-control" name="movie[image]"id="image"placeholder="image url">
-         </div> -->
-         <div>
-            <button class="btn btn-success">ADD</button>
-         </div>
-     </div>
+      <div class="row g-3 mb-3">
+        <div class="col">
+          <label class="form-label">Language *</label>
+          <select name="movie[language]" class="form-select bg-dark text-light border-secondary" required>
+            <% for (let l of languages) { %><option value="<%= l %>"><%= l %></option><% } %>
+          </select>
+        </div>
+        <div class="col">
+          <label class="form-label">Genre *</label>
+          <select name="movie[genre]" class="form-select bg-dark text-light border-secondary" required>
+            <% for (let g of genres) { %><option value="<%= g %>"><%= g %></option><% } %>
+          </select>
+        </div>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col">
+          <label class="form-label">Hero</label>
+          <input type="text" name="movie[hero]" class="form-control bg-dark text-light border-secondary">
+        </div>
+        <div class="col">
+          <label class="form-label">Heroine</label>
+          <input type="text" name="movie[heroine]" class="form-control bg-dark text-light border-secondary">
+        </div>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col">
+          <label class="form-label">Year</label>
+          <input type="text" name="movie[year]" class="form-control bg-dark text-light border-secondary" placeholder="e.g. 2023">
+        </div>
+        <div class="col">
+          <label class="form-label">Rating (0–10)</label>
+          <input type="number" name="movie[rating]" class="form-control bg-dark text-light border-secondary" min="0" max="10" step="0.1">
+        </div>
+        <div class="col">
+          <label class="form-label">OTT Platform</label>
+          <input type="text" name="movie[ott]" class="form-control bg-dark text-light border-secondary" placeholder="e.g. Netflix">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Storyline</label>
+        <textarea name="movie[storyline]" class="form-control bg-dark text-light border-secondary" rows="3"></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Images</label>
+        <input type="file" name="images" class="form-control bg-dark text-light border-secondary" multiple accept="image/*">
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-warning"><i class="bi bi-plus-circle me-1"></i>Add Movie</button>
+        <a href="/movies" class="btn btn-outline-secondary">Cancel</a>
+      </div>
     </form>
-    <!-- <script src="/validateforms.js"> </script> -->
-    
-    <script>
- // Example starter JavaScript for disabling form submissions if there are invalid fields
-(function () {
-  'use strict'
-
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  const forms = document.querySelectorAll('.validated-form')
-
-  // Loop over them and prevent submission
-  Array.from(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-
-        form.classList.add('was-validated')
-      }, false)
-    })
-})()
-    </script>
+  </div>
+</div>
+<script>
+  (() => {
+    const forms = document.querySelectorAll('.needs-validation');
+    forms.forEach(f => f.addEventListener('submit', e => {
+      if (!f.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+      f.classList.add('was-validated');
+    }));
+  })();
+</script>
