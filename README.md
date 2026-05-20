@@ -30,10 +30,14 @@ Moviez is an Express.js web application for browsing, reviewing, and tracking mo
    node index.js
    ```
 
-4. Open the app in your browser at:
+4. Open the app in your browser locally at:
    ```
    http://localhost:5500
    ```
+
+## Live Demo
+
+- Vercel: https://moviez-eta.vercel.app/
 
 ## Project Structure
 
